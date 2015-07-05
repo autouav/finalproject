@@ -38,12 +38,21 @@ public class moveThread extends Thread {
                     if (sensorArr[0] == 0 && sensorArr[1] != 0 && sensorArr[0] == 0) { // Front Obstacle -> Go Back
                         drone.move(0,speed[0],0,0);
                         whatThreadDo[0] = "-> GO BACK ->";
-                    } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[0] == 0) { // Left Obstacle -> Go Right
+                    } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[2] == 0) { // Left Obstacle -> Go Right
                         drone.move(speed[0],0,0,0);
                         whatThreadDo[0] = "-> GO RIGHT ->";
-                    } else if (sensorArr[0] == 0 && sensorArr[1] == 0 && sensorArr[0] != 0) { // Right Obstacle -> Go Left
+                    } else if (sensorArr[0] == 0 && sensorArr[1] == 0 && sensorArr[2] != 0) { // Right Obstacle -> Go Left
                         drone.move(-speed[0],0,0,0);
                         whatThreadDo[0] = "-> GO LEFT ->";
+                    } else if (sensorArr[0] != 0 && sensorArr[1] != 0 && sensorArr[2] == 0) { // Left-Front Obstacle -> Go Right-Back
+                        drone.move(speed[0],speed[0],0,0);
+                        whatThreadDo[0] = "-> GO RIGHT-BACK ->";
+                    } else if (sensorArr[0] == 0 && sensorArr[1] != 0 && sensorArr[2] != 0) { // Right-Front Obstacle -> Go Left-Back
+                        drone.move(-speed[0],speed[0],0,0);
+                        whatThreadDo[0] = "-> GO LEFT-BACK ->";
+                    } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[2] != 0) { // Right-Left Obstacle -> Go Straight
+                        drone.move(-speed[0],speed[0],0,0);
+                        whatThreadDo[0] = "-> GO STRAIGHT ->";
                     }
 
                 }
