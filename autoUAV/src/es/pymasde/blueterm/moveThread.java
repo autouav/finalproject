@@ -35,9 +35,15 @@ public class moveThread extends Thread {
                 }
 
                 else {
-                    if (sensorArr[1] != 0 && sensorArr[0] == 0) {
+                    if (sensorArr[0] == 0 && sensorArr[1] != 0 && sensorArr[0] == 0) { // Front Obstacle -> Go Back
+                        drone.move(0,speed[0],0,0);
+                        whatThreadDo[0] = "-> GO BACK ->";
+                    } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[0] == 0) { // Left Obstacle -> Go Right
+                        drone.move(speed[0],0,0,0);
+                        whatThreadDo[0] = "-> GO RIGHT ->";
+                    } else if (sensorArr[0] == 0 && sensorArr[1] == 0 && sensorArr[0] != 0) { // Right Obstacle -> Go Left
                         drone.move(-speed[0],0,0,0);
-                        whatThreadDo[0] = "Bypassing an obstacle";
+                        whatThreadDo[0] = "-> GO LEFT ->";
                     }
 
                 }
