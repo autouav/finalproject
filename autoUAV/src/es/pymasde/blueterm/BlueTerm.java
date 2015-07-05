@@ -1,4 +1,3 @@
-// naor haGEVER
 
 package es.pymasde.blueterm;
 

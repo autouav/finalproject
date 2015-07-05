@@ -32,7 +32,6 @@ public class moveThread extends Thread {
                 }
                 else if (Function.isAllZero(sensorArr)==true) {
                     drone.move(move[0],move[1],move[2],move[3]);
-                    //whatThreadDo[0] = "-> GO <-";
                 }
 
                 else {
