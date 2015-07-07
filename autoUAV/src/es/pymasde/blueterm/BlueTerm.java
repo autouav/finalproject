@@ -205,7 +205,8 @@ public class BlueTerm extends Activity {
                 Thread.sleep(300);
                 getND.getNavdata();
                 Thread.sleep(100);
-                mThread.start();
+                if (!mThread.isAlive())
+                    mThread.start();
             }
             else {
                 drone.land();
