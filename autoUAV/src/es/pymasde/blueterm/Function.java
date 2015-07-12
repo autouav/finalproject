@@ -22,6 +22,13 @@ public class Function {
         }
     }
 
+    public static void fillMoveArray(int arr[], int a0, int a1, int a2, int a3) {
+        arr[0] = a0;
+        arr[1] = a1;
+        arr[2] = a2;
+        arr[3] = a3;
+    }
+
     public static boolean isAllZero(int arr[], int size) {
         for (int i = 0; i<size; i++) {
             if (arr[i]!=0) return false;

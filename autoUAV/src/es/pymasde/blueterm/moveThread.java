@@ -5,6 +5,8 @@ import java.io.IOException;
 
 public class moveThread extends Thread {
 
+    private static final int valMAX = 150;
+
     ARDrone drone;
     int move[];
     String bluetooth[];
@@ -12,6 +14,7 @@ public class moveThread extends Thread {
     Function.droneMode droneMode[];
     String whatThreadDo[];
     int sensorArr[];
+
 
     public moveThread(ARDrone drone, int move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[]) {
         this.drone = drone;
@@ -27,12 +30,17 @@ public class moveThread extends Thread {
             // 0->left, 1->front, 2->right
             sensorArr = Function.CutBlueString(bluetooth[0]);
             try {
-                if (Function.isAllZero(move, Function.numOfSensor)==true && Function.isAllZero(sensorArr, 3)==true) {
+                if (Function.isAllZero(move, Function.numOfSensor) && Function.isAllZero(sensorArr, 3)) {
                     drone.hover();
                     whatThreadDo[0] = "-> HOVER <-";
                 }
-                else if (Function.isAllZero(sensorArr, 3)==true) {
+                else if (Function.isAllZero(sensorArr, 3) && sensorArr[3] >= valMAX) {
                     drone.move(move[0],move[1],move[2],move[3]);
+                }
+
+                else if (sensorArr[3] < valMAX) {
+                    Function.fillMoveArray(move, 0,0,0,0);
+
                 }
 
                 else {
@@ -55,8 +63,9 @@ public class moveThread extends Thread {
                         drone.move(-speed[0],speed[0],0,0);
                         whatThreadDo[0] = "-> GO STRAIGHT ->";
                     }
-
                 }
+
+
 
             }
             catch (IOException e) {

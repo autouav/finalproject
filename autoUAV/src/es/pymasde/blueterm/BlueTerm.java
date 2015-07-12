@@ -224,56 +224,51 @@ public class BlueTerm extends Activity {
         keyboard.setVis();
     }
 
-    public void fillMoveArray(int a0, int a1, int a2, int a3) {
-        move[0] = a0;
-        move[1] = a1;
-        move[2] = a2;
-        move[3] = a3;
-    }
+
 
     public void goFront(View v) {
         moveThreadDoString[0] = "-> GO FRONT ->";
-        fillMoveArray(0,(int) ((-1) * speed[0]),0,0);
+        Function.fillMoveArray(move, 0, (int) ((-1) * speed[0]), 0, 0);
     }
 
     public void goBack(View v) {
         moveThreadDoString[0] = "-> GO BACK ->";
-        fillMoveArray(0,(int) speed[0],0,0);
+        Function.fillMoveArray(move, 0, (int) speed[0], 0, 0);
     }
 
     public void goRight(View v) {
         moveThreadDoString[0] = "-> GO Right ->";
-        fillMoveArray((int) speed[0],0,0,0);
+        Function.fillMoveArray(move, (int) speed[0], 0, 0, 0);
     }
 
     public void goLeft(View v) {
         moveThreadDoString[0] = "-> GO Left ->";
-        fillMoveArray((int) ((-1) * speed[0]),0,0,0);
+        Function.fillMoveArray(move, (int) ((-1) * speed[0]), 0, 0, 0);
     }
 
     public void hover(View v) {
         moveThreadDoString[0] = "-> HOVER <-";
-        fillMoveArray(0,0,0,0);
+        Function.fillMoveArray(move, 0, 0, 0, 0);
     }
 
     public void goUp(View v) {
         moveThreadDoString[0] = "-> GO UP <-";
-        fillMoveArray(0,0,(int) speed[0],0);
+        Function.fillMoveArray(move, 0, 0, (int) speed[0], 0);
     }
 
     public void goDown(View v) {
         moveThreadDoString[0] = "-> GO DOWN <-";
-        fillMoveArray(0,0,(int) ((-1) * speed[0]),0);
+        Function.fillMoveArray(move, 0, 0, (int) ((-1) * speed[0]), 0);
     }
 
     public void goYawRight(View v) {
         moveThreadDoString[0] = "-> GO YAW RIGHT <-";
-        fillMoveArray(0,0,0,(int) ((-1) * speed[0]));
+        Function.fillMoveArray(move, 0, 0, 0, (int) ((-1) * speed[0]));
     }
 
     public void goYawLeft(View v) {
         moveThreadDoString[0] = "-> GO YAW LEFT <-";
-        fillMoveArray(0,0,0,(int) speed[0]);
+        Function.fillMoveArray(move, 0, 0, 0, (int) speed[0]);
     }
 
 
@@ -363,8 +358,8 @@ public class BlueTerm extends Activity {
         speedNum = (TextView) findViewById(R.id.speedNum);
         keyboard = new Keyboard(ll,speedBar,speedNum);
 
-        fillMoveArray(0,0,0,0);
-        bluetooth[0] = "0,0,0";
+        Function.fillMoveArray(move, 0, 0, 0, 0);
+        bluetooth[0] = "0,0,0,0";
         speed[0] = 10;// Integer.parseInt(keyboard.num.getText().toString());
         //System.out.println("speed -> " + keyboard.num.getText().toString());
         //Toast.makeText(BlueTerm.this,"hello",Toast.LENGTH_SHORT).show();

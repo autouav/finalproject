@@ -12,17 +12,6 @@
         <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../blueterm_1.1.1/proguard_logs" />
       </configuration>
     </facet>
-    <facet type="android" name="Android2">
-      <configuration>
-        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../blueterm_1.1.1/gen" />
-        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../blueterm_1.1.1/gen" />
-        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../blueterm_1.1.1/AndroidManifest.xml" />
-        <option name="RES_FOLDER_RELATIVE_PATH" value="/../../blueterm_1.1.1/res" />
-        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../blueterm_1.1.1/assets" />
-        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../../blueterm_1.1.1/libs" />
-        <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../blueterm_1.1.1/proguard_logs" />
-      </configuration>
-    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
