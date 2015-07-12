@@ -643,7 +643,7 @@ class EmulatorView extends View implements GestureDetector.OnGestureListener {
             FullString = FullString + stringRead;
             if(FullString.length()>0 && FullString.charAt(FullString.length()-1)=='\n') {
                 //System.out.print("BlueTerm.FullString = " +FullString);
-                BlueTerm.bluetooth[0] = FullString;
+                BlueTerm.bluetooth[0] = FullString.substring(0,FullString.length()-1);
                 FullString = "";
             }
             //

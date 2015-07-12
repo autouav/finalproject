@@ -168,7 +168,7 @@
             <SeekBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/speedBar" android:layout_weight="1" android:max="100" android:progress="10"
+                    android:id="@+id/speedBar" android:layout_weight="1" android:max="30" android:progress="3"
                     android:indeterminate="false"/>
             <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
                       android:textAppearance="?android:attr/textAppearanceMedium" android:text="10"

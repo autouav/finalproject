@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 
 public class Function {
 
-    public static final int numOfSensor = 3;
+    public static final int numOfSensor = 4;
 
     public static enum droneMode {
         Stay_And_Warn_Dynamic(1),
@@ -22,8 +22,8 @@ public class Function {
         }
     }
 
-    public static boolean isAllZero(int arr[]) {
-        for (int i = 0; i<arr.length; i++) {
+    public static boolean isAllZero(int arr[], int size) {
+        for (int i = 0; i<size; i++) {
             if (arr[i]!=0) return false;
         }
         return true;
@@ -36,9 +36,11 @@ public class Function {
         while (st.hasMoreTokens() && index < numOfSensor) {
             String temp = st.nextToken();
             try {
-                arr[index] = Integer.parseInt(temp);
+                arr[index] = (int)Double.parseDouble(temp);
             } catch (Exception e) {
+                arr[index] = -1;
                 System.out.println("Function.CutBlueString -> problem");
+                e.printStackTrace();
             }
             index++;
         }
