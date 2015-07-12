@@ -52,7 +52,8 @@ public class BlueTerm extends Activity {
     Keyboard keyboard;
     SeekBar speedBar;
     TextView speedNum;
-    public static Thread mThread;
+    public static Thread modeThread;
+    public static Thread moveThread;
     public static TextView moveThreadDo;
     public static String moveThreadDoString[] = new String[1];
 
@@ -207,8 +208,10 @@ public class BlueTerm extends Activity {
                 Thread.sleep(300);
                 getND.getNavdata();
                 Thread.sleep(100);
-                if (!mThread.isAlive())
-                    mThread.start();
+                if (!modeThread.isAlive()) {
+                    modeThread.start();
+                    moveThread.start();
+                }
             }
             else {
                 drone.land();
@@ -363,7 +366,7 @@ public class BlueTerm extends Activity {
 
         Function.fillMoveArray(move, 0, 0, 0, 0);
         bluetooth[0] = "0,0,0,0";
-        speed[0] = 10;// Integer.parseInt(keyboard.num.getText().toString());
+        speed[0] = Integer.parseInt(keyboard.num.getText().toString());
         //System.out.println("speed -> " + keyboard.num.getText().toString());
         //Toast.makeText(BlueTerm.this,"hello",Toast.LENGTH_SHORT).show();
         dMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
@@ -371,7 +374,8 @@ public class BlueTerm extends Activity {
         moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
         droneLocation = new GpsPoint(35.209722, 32.102935);
         gpc = new GpsPointContainer(droneLocation);
-        mThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
+        modeThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
+        moveThread = new MoveThread(drone,move,speed);
         //
 	}
 
