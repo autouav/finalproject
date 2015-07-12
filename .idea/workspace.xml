@@ -88,8 +88,8 @@
       <file leaf-file-name="moveThread.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/autoUAV/src/es/pymasde/blueterm/moveThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.1761006" vertical-offset="0" max-vertical-offset="1275">
-              <caret line="33" column="66" selection-start-line="33" selection-start-column="66" selection-end-line="33" selection-end-column="66" />
+            <state vertical-scroll-proportion="0.4989518" vertical-offset="0" max-vertical-offset="1275">
+              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -608,12 +608,12 @@
       <workItem from="1436099352718" duration="1838000" />
       <workItem from="1436255268377" duration="765000" />
       <workItem from="1436256265039" duration="6577000" />
-      <workItem from="1436684070214" duration="10947000" />
+      <workItem from="1436684070214" duration="11271000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="52501000" />
+    <option name="totallyTimeSpent" value="52825000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
@@ -1149,8 +1149,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/autoUAV/src/es/pymasde/blueterm/moveThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1761006" vertical-offset="0" max-vertical-offset="1275">
-          <caret line="33" column="66" selection-start-line="33" selection-start-column="66" selection-end-line="33" selection-end-column="66" />
+        <state vertical-scroll-proportion="0.4989518" vertical-offset="0" max-vertical-offset="1275">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

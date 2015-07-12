@@ -13,7 +13,7 @@ public class moveThread extends Thread {
     String whatThreadDo[];
     int sensorArr[];
 
-    public moveThread(ARDrone drone, int move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[], GpsPoint gpsPoint) {
+    public moveThread(ARDrone drone, int move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[]) {
         this.drone = drone;
         this.move = move;
         this.bluetooth = bluetooth;
@@ -27,7 +27,7 @@ public class moveThread extends Thread {
             // 0->left, 1->front, 2->right
             sensorArr = Function.CutBlueString(bluetooth[0]);
             try {
-                if (Function.isAllZero(move, Function.numOfSensor)==true && Function.isAllZero(sensorArr, 3)==truez) {
+                if (Function.isAllZero(move, Function.numOfSensor)==true && Function.isAllZero(sensorArr, 3)==true) {
                     drone.hover();
                     whatThreadDo[0] = "-> HOVER <-";
                 }
