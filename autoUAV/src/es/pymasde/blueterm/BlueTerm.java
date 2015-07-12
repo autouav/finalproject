@@ -34,8 +34,6 @@ import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import com.codeminders.ardrone.ARDrone;
-import com.codeminders.ardrone.NavData;
-import com.codeminders.ardrone.NavDataListener;
 
 
 public class BlueTerm extends Activity {
@@ -373,7 +371,7 @@ public class BlueTerm extends Activity {
         moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
         droneLocation = new GpsPoint(35.209722, 32.102935);
         gpc = new GpsPointContainer(droneLocation);
-        mThread = new moveThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
+        mThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
         //
 	}
 

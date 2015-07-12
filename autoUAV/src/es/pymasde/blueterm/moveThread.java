@@ -1,110 +1,28 @@
 package es.pymasde.blueterm;
+
 import com.codeminders.ardrone.ARDrone;
 
 import java.io.IOException;
 
-public class moveThread extends Thread {
-
-    private static final int valMAX = 150;
+public class MoveThread extends Thread{
 
     ARDrone drone;
     float move[];
-    String bluetooth[];
     float speed[];
-    Function.droneMode droneMode[];
-    String whatThreadDo[];
-    float sensorArr[];
-    GpsPointContainer gpc;
-    getNavData getND;
 
-
-    public moveThread(ARDrone drone, float move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[], GpsPointContainer gpc, getNavData getND) {
+    public MoveThread(ARDrone drone, float move[], float speed[]) {
         this.drone = drone;
         this.move = move;
-        this.bluetooth = bluetooth;
         this.speed = speed;
-        this.droneMode = droneMode;
-        this.whatThreadDo = whatThreadDo;
-        this.getND = getND;
-        this.gpc = gpc;
     }
 
     public void run() {
         while (true) {
-            // 0->left, 1->front, 2->right
-            sensorArr = Function.CutBlueString(bluetooth[0]);
             try {
-
-                if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
-                    if (Function.isAllZero(move, Function.numOfSensor) && Function.isAllZero(sensorArr, 3)) {
-                        drone.hover();
-                        whatThreadDo[0] = "-> HOVER <-";
-                    }
-                    else if (Function.isAllZero(move, Function.numOfSensor) == false && Function.isAllZero(sensorArr, 3)) {
-                        droneMode[0] = Function.droneMode.Find_Azimuth;
-                    }
-                    else if (Function.isAllZero(move, Function.numOfSensor) == false && Function.isAllZero(sensorArr, 3)== false) {
-                        droneMode[0] = Function.droneMode.Immediate_Danger;
-                    }
-                }
-
-                if (droneMode[0] == Function.droneMode.Find_Azimuth) {
-
-                    if (gpc.isEmpty()) droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
-                    else {
-                        GpsPoint temp = gpc.getFirst();
-                        double azi = Cords.azmDist(gpc.getLocation(), temp)[0];
-                        double aziFix = getND.Yaw - azi;
-                        if (aziFix < 0) aziFix += 360;
-
-                        System.out.println("aziFix " + aziFix);
-                        if (aziFix < 350 && aziFix > 10) {
-                            if (aziFix>180 && aziFix<360) drone.move(0,0,0,speed[0]);//Function.fillMoveArray(move, 0,0,0,-speed[0]);
-                            else drone.move(0,0,0,-speed[0]);//Function.fillMoveArray(move, 0, 0, 0, speed[0]);
-                        }
-                        else {
-                            droneMode[0] = Function.droneMode.Fly_Straight_And_Beware;
-                        }
-                    }
-                }
-
-
-                /*
-                 if (Function.isAllZero(sensorArr, 3) && sensorArr[3] >= valMAX) {
-                    drone.move(move[0],move[1],move[2],move[3]);
-                }
-
-                else if (sensorArr[3] < valMAX) {
-                    Function.fillMoveArray(move, 0, 0, 0, 0);
-
-                }
-
-                else {
-                    if (sensorArr[0] == 0 && sensorArr[1] != 0 && sensorArr[0] == 0) { // Front Obstacle -> Go Back
-                        drone.move(0,speed[0],0,0);
-                        whatThreadDo[0] = "-> GO BACK ->";
-                    } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[2] == 0) { // Left Obstacle -> Go Right
-                        drone.move(speed[0],0,0,0);
-                        whatThreadDo[0] = "-> GO RIGHT ->";
-                    } else if (sensorArr[0] == 0 && sensorArr[1] == 0 && sensorArr[2] != 0) { // Right Obstacle -> Go Left
-                        drone.move(-speed[0],0,0,0);
-                        whatThreadDo[0] = "-> GO LEFT ->";
-                    } else if (sensorArr[0] != 0 && sensorArr[1] != 0 && sensorArr[2] == 0) { // Left-Front Obstacle -> Go Right-Back
-                        drone.move(speed[0],speed[0],0,0);
-                        whatThreadDo[0] = "-> GO RIGHT-BACK ->";
-                    } else if (sensorArr[0] == 0 && sensorArr[1] != 0 && sensorArr[2] != 0) { // Right-Front Obstacle -> Go Left-Back
-                        drone.move(-speed[0],speed[0],0,0);
-                        whatThreadDo[0] = "-> GO LEFT-BACK ->";
-                    } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[2] != 0) { // Right-Left Obstacle -> Go Straight
-                        drone.move(-speed[0],speed[0],0,0);
-                        whatThreadDo[0] = "-> GO STRAIGHT ->";
-                    }
-                }
-                */
-            }
-            catch (IOException e) {
+                if (Function.isAllZero(move, 4)) drone.hover();
+                else drone.move(move[0], move[1], move[2], move[3]);
+            } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("moveThread -> problem");
             }
         }
     }
