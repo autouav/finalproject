@@ -8,8 +8,9 @@ public class Function {
 
     public static enum droneMode {
         Stay_And_Warn_Dynamic(1),
-        Fly_Straight_And_Beware(2),
-        Find_Azimuth(3);
+        Find_Azimuth(2),
+        Fly_Straight_And_Beware(3),
+        Immediate_Danger(4);
 
         private int code;
 
@@ -22,28 +23,28 @@ public class Function {
         }
     }
 
-    public static void fillMoveArray(int arr[], int a0, int a1, int a2, int a3) {
+    public static void fillMoveArray(float arr[], float a0, float a1, float a2, float a3) {
         arr[0] = a0;
         arr[1] = a1;
         arr[2] = a2;
         arr[3] = a3;
     }
 
-    public static boolean isAllZero(int arr[], int size) {
+    public static boolean isAllZero(float arr[], int size) {
         for (int i = 0; i<size; i++) {
             if (arr[i]!=0) return false;
         }
         return true;
     }
 
-    public static int[] CutBlueString(String bluetooth) {
-        int arr[] = new int[numOfSensor];
+    public static float[] CutBlueString(String bluetooth) {
+        float arr[] = new float[numOfSensor];
         int index = 0;
         StringTokenizer st = new StringTokenizer(bluetooth, ", ");
         while (st.hasMoreTokens() && index < numOfSensor) {
             String temp = st.nextToken();
             try {
-                arr[index] = (int)Double.parseDouble(temp);
+                arr[index] = (float) Double.parseDouble(temp);
             } catch (Exception e) {
                 arr[index] = -1;
                 System.out.println("Function.CutBlueString -> problem");

@@ -58,10 +58,14 @@ public class BlueTerm extends Activity {
     public static TextView moveThreadDo;
     public static String moveThreadDoString[] = new String[1];
 
-    int move[] = new int[4];
+    float move[] = new float[4];
     public static String bluetooth[] = new String[1];
     float speed[] = new float[1];
     Function.droneMode dMode[] = new Function.droneMode[1];
+
+    GpsPoint droneLocation;
+    GpsPointContainer gpc;
+
     //
 
     // Intent request codes
@@ -249,6 +253,7 @@ public class BlueTerm extends Activity {
     public void hover(View v) {
         moveThreadDoString[0] = "-> HOVER <-";
         Function.fillMoveArray(move, 0, 0, 0, 0);
+        dMode[0] = Function.droneMode.Find_Azimuth; // ------------------------------------
     }
 
     public void goUp(View v) {
@@ -366,7 +371,9 @@ public class BlueTerm extends Activity {
         dMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
         moveThreadDoString = new String[1];
         moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
-        mThread = new moveThread(drone,move,bluetooth,speed,dMode,moveThreadDoString);
+        droneLocation = new GpsPoint(35.209722, 32.102935);
+        gpc = new GpsPointContainer(droneLocation);
+        mThread = new moveThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
         //
 	}
 
