@@ -254,7 +254,6 @@ public class BlueTerm extends Activity {
     public void hover(View v) {
         moveThreadDoString[0] = "-> HOVER <-";
         Function.fillMoveArray(move, 0, 0, 0, 0);
-        dMode[0] = Function.droneMode.Find_Azimuth; // ------------------------------------
     }
 
     public void goUp(View v) {
@@ -277,6 +276,9 @@ public class BlueTerm extends Activity {
         Function.fillMoveArray(move, 0, 0, 0, (int) speed[0]);
     }
 
+    public void findAzi(View v) {
+        dMode[0] = Function.droneMode.Find_Azimuth;
+    }
 
 
 

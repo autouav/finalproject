@@ -3,7 +3,6 @@ package es.pymasde.blueterm;
 import com.codeminders.ardrone.ARDrone;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class MoveThread extends Thread {
     ARDrone drone;

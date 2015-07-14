@@ -10,7 +10,8 @@ public class Function {
         Stay_And_Warn_Dynamic(1),
         Find_Azimuth(2),
         Fly_Straight_And_Beware(3),
-        Immediate_Danger(4);
+        Immediate_Danger(4),
+        Manual_Flight(5);
 
         private int code;
 
