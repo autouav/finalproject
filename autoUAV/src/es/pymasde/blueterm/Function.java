@@ -11,7 +11,8 @@ public class Function {
         Find_Azimuth(2),
         Fly_Straight_And_Beware(3),
         Immediate_Danger(4),
-        Manual_Flight(5);
+        Manual_Flight(5),
+        Skip_Obstacle(6);
 
         private int code;
 

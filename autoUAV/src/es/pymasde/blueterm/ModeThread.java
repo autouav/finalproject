@@ -1,6 +1,8 @@
 package es.pymasde.blueterm;
 import com.codeminders.ardrone.ARDrone;
 
+import java.io.IOException;
+
 public class ModeThread extends Thread {
 
     private static final int valMAX = 150;
@@ -92,28 +94,33 @@ public class ModeThread extends Thread {
             }
 
             if (droneMode[0] == Function.droneMode.Manual_Flight) {
-                whatThreadDo[0] = "-> ManualFlight ->" + "  ManualFlight";
+                whatThreadDo[0] = "Manual_Flight";
                 if (Function.isAllZero(move, 4)) {
                     droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
                 }
             }
 
-
-                /*
-                 if (Function.isAllZero(sensorArr, 3) && sensorArr[3] >= valMAX) {
-                    drone.move(move[0],move[1],move[2],move[3]);
+            if (droneMode[0] == Function.droneMode.Fly_Straight_And_Beware) {
+                whatThreadDo[0] = "Fly_Straight_And_Beware";
+                Function.fillMoveArray(move, 0, -speed[0], 0, 0);
+                if (Function.isAllZero(sensorArr, 3)== false) {
+                    droneMode[0] = Function.droneMode.Immediate_Danger;
                 }
-
-                else if (sensorArr[3] < valMAX) {
-                    Function.fillMoveArray(move, 0, 0, 0, 0);
-
+                else if (sensorArr[3] <= valMAX) {
+                    droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
+                    try {
+                        drone.playLED(1,2,10);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-
                 else {
-
+                    Function.fillMoveArray(move, 0, -speed[0], 0, 0);
                 }
-                */
+            }
         }
+
+
 
     }
 }
