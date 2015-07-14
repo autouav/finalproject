@@ -5,8 +5,7 @@ import com.codeminders.ardrone.ARDrone;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class MoveThread extends Thread{
-
+public class MoveThread extends Thread {
     ARDrone drone;
     float move[];
     float speed[];
@@ -28,5 +27,4 @@ public class MoveThread extends Thread{
             }
         }
     }
-
 }
