@@ -21,7 +21,6 @@ public class MoveThread extends Thread {
             try {
                 if (Function.isAllZero(move, 4)) drone.hover();
                 else drone.move(move[0], move[1], move[2], move[3]);
-                System.out.println("move = " + Arrays.toString(move));
             } catch (IOException e) {
                 e.printStackTrace();
             }

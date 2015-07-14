@@ -35,7 +35,7 @@ public class ModeThread extends Thread {
 
             if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
                 if (Function.isAllZero(move, Function.numOfSensor) && Function.isAllZero(sensorArr, 3)) {
-                    //drone.hover();
+                    Function.fillMoveArray(move, 0, 0, 0, 0);
                     whatThreadDo[0] = "-> HOVER <-";
                 }
                 else if (Function.isAllZero(move, Function.numOfSensor) == false && Function.isAllZero(sensorArr, 3)) {
@@ -55,13 +55,12 @@ public class ModeThread extends Thread {
                     double aziFix = getND.Yaw - azi;
                     if (aziFix < 0) aziFix += 360;
 
-                    System.out.println("aziFix " + aziFix);
                     if (aziFix < 350 && aziFix > 10) {
                         if (aziFix>180 && aziFix<360) Function.fillMoveArray(move, 0,0,0,speed[0]); // drone.move(0,0,0,speed[0]);
                         else Function.fillMoveArray(move, 0, 0, 0, -speed[0]); // drone.move(0,0,0,-speed[0]);
                     }
                     else {
-                        droneMode[0] = Function.droneMode.Fly_Straight_And_Beware;
+                        droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
                     }
                 }
             }

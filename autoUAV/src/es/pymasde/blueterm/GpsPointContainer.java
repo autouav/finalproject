@@ -17,7 +17,7 @@ public class GpsPointContainer {
         /*
          ------------------------------------------just for test
           */
-        GpsPoint gp = new GpsPoint(35.209840, 32.102688);
+        GpsPoint gp = new GpsPoint(35.086128,32.167524);//(35.0852831, 32.1675153);
         listPoint.add(gp);
     }
 

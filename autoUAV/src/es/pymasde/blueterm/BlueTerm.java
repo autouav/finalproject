@@ -362,17 +362,17 @@ public class BlueTerm extends Activity {
         LinearLayout ll = (LinearLayout) findViewById(R.id.keyboard);
         speedBar = (SeekBar) findViewById(R.id.speedBar);
         speedNum = (TextView) findViewById(R.id.speedNum);
-        keyboard = new Keyboard(ll,speedBar,speedNum);
+        keyboard = new Keyboard(ll,speedBar,speedNum,speed);
 
         Function.fillMoveArray(move, 0, 0, 0, 0);
         bluetooth[0] = "0,0,0,0";
-        speed[0] = Integer.parseInt(keyboard.num.getText().toString());
+
         //System.out.println("speed -> " + keyboard.num.getText().toString());
         //Toast.makeText(BlueTerm.this,"hello",Toast.LENGTH_SHORT).show();
         dMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
         moveThreadDoString = new String[1];
         moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
-        droneLocation = new GpsPoint(35.209722, 32.102935);
+        droneLocation = new GpsPoint(35.0852831, 32.1675153);//(35.209722, 32.102935);
         gpc = new GpsPointContainer(droneLocation);
         modeThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
         moveThread = new MoveThread(drone,move,speed);

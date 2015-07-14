@@ -11,19 +11,19 @@ public class Keyboard {
     boolean flag = false;
     SeekBar speedBar;
     TextView num;
-    public int progressChanged;
+    public float progressChanged[];
 
-    public Keyboard(LinearLayout ll, SeekBar speedBar, final TextView num) {
+    public Keyboard(LinearLayout ll, SeekBar speedBar, final TextView num, float speed[]) {
         this.ll = ll;
         this.speedBar = speedBar;
         ll.setVisibility(View.GONE);
-        progressChanged = 10;
+        this.progressChanged = speed;
         this.num = num;
 
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                progressChanged = i;
+                progressChanged[0] = i;
             }
 
             @Override
@@ -31,7 +31,7 @@ public class Keyboard {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                num.setText(progressChanged + "");
+                num.setText(progressChanged[0] + "");
             }
         });
     }
