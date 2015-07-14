@@ -62,7 +62,8 @@ public class ModeThread extends Thread {
                     }
                     else {
                         Function.fillMoveArray(move, 0, 0, 0, 0);
-                        droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
+                        //droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
+                        droneMode[0] = Function.droneMode.Fly_Straight_And_Beware;
                     }
                 }
             }
@@ -102,11 +103,11 @@ public class ModeThread extends Thread {
 
             if (droneMode[0] == Function.droneMode.Fly_Straight_And_Beware) {
                 whatThreadDo[0] = "Fly_Straight_And_Beware";
-                Function.fillMoveArray(move, 0, -speed[0], 0, 0);
                 if (Function.isAllZero(sensorArr, 3)== false) {
                     droneMode[0] = Function.droneMode.Immediate_Danger;
                 }
                 else if (sensorArr[3] <= valMAX) {
+                    Function.fillMoveArray(move, 0, 0, 0, 0);
                     droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
                     try {
                         drone.playLED(1,2,10);
