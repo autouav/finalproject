@@ -165,6 +165,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/speedLayout"
                 >
             <TextView
                     android:layout_width="wrap_content"
@@ -175,18 +176,30 @@
             <SeekBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/speedBar" android:layout_weight="1" android:max="30" android:progress="3"
+                    android:id="@+id/speedBar" android:layout_weight="1" android:max="100" android:progress="3"
                     android:indeterminate="false"/>
             <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
                       android:textAppearance="?android:attr/textAppearanceMedium" android:text="10"
                       android:id="@+id/speedNum" android:layout_weight="0.16" android:gravity="center"/>
         </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:id="@+id/tiltLayout">
+            <TextView android:layout_width="wrap_content" android:layout_height="37dp"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Tilt     "
+                      android:id="@+id/tiltJustText" android:layout_weight="0.10" android:gravity="center"/>
+            <SeekBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tiltBar"
+                     android:layout_weight="1" android:max="30" android:progress="3" android:indeterminate="false"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="10"
+                      android:id="@+id/tiltNum" android:layout_weight="0.16" android:gravity="center"/>
+        </LinearLayout>
     </LinearLayout>
+
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="What the MoveThread do..."
-            android:id="@+id/moveThreadDo" android:layout_gravity="center_horizontal"/>
+            android:id="@+id/moveThreadDo"/>
 
 </LinearLayout>

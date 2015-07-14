@@ -52,6 +52,8 @@ public class BlueTerm extends Activity {
     Keyboard keyboard;
     SeekBar speedBar;
     TextView speedNum;
+    SeekBar tiltBar;
+    TextView tiltNum;
     public static Thread modeThread;
     public static Thread moveThread;
     public static TextView moveThreadDo;
@@ -59,7 +61,7 @@ public class BlueTerm extends Activity {
 
     float move[] = new float[4];
     public static String bluetooth[] = new String[1];
-    float speed[] = new float[1];
+    float speed[] = new float[2];
     Function.droneMode dMode[] = new Function.droneMode[1];
 
     GpsPoint droneLocation;
@@ -364,7 +366,13 @@ public class BlueTerm extends Activity {
         LinearLayout ll = (LinearLayout) findViewById(R.id.keyboard);
         speedBar = (SeekBar) findViewById(R.id.speedBar);
         speedNum = (TextView) findViewById(R.id.speedNum);
-        keyboard = new Keyboard(ll,speedBar,speedNum,speed);
+        tiltBar = (SeekBar) findViewById(R.id.tiltBar);
+        tiltNum = (TextView) findViewById(R.id.tiltNum);
+
+        SeekBar[] seekBars = {speedBar, tiltBar};
+        TextView[] textBars = {speedNum, tiltNum};
+
+        keyboard = new Keyboard(drone,ll,seekBars,textBars,speed);
 
         Function.fillMoveArray(move, 0, 0, 0, 0);
         bluetooth[0] = "0,0,0,0";
