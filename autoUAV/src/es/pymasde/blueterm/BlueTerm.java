@@ -34,6 +34,8 @@ import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import com.codeminders.ardrone.ARDrone;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 
 
 public class BlueTerm extends Activity {
@@ -72,6 +74,7 @@ public class BlueTerm extends Activity {
 
     GpsPoint droneLocation;
     GpsPointContainer gpc;
+    private GoogleMap map;
 
     //
 
@@ -398,6 +401,10 @@ public class BlueTerm extends Activity {
         gpc = new GpsPointContainer(droneLocation);
         modeThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
         moveThread = new MoveThread(drone,move,speed);
+
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        map.setMyLocationEnabled(true);
         //
 	}
 
