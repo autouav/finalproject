@@ -39,6 +39,13 @@ public class Function {
         return true;
     }
 
+    public static boolean isAllLowerNum(float arr[], int size, float num) {
+        for (int i = 0; i<size; i++) {
+            if (arr[i]>=num) return false;
+        }
+        return true;
+    }
+
     public static float[] CutBlueString(String bluetooth) {
         float arr[] = new float[numOfSensor];
         int index = 0;

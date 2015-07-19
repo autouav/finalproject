@@ -67,7 +67,7 @@ public class BlueTerm extends Activity {
 
     float move[] = new float[4];
     public static String bluetooth[] = new String[1];
-    float speed[] = {5,10,200,150};
+    float speed[] = {5,10,200,200};
     Function.droneMode dMode[] = new Function.droneMode[1];
 
     GpsPoint droneLocation;

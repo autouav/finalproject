@@ -2,10 +2,10 @@ package es.pymasde.blueterm;
 import com.codeminders.ardrone.ARDrone;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ModeThread extends Thread {
 
-    private static final int valMAX = 150;
     private static Function.droneMode prevMode;
 
     ARDrone drone;
@@ -35,18 +35,17 @@ public class ModeThread extends Thread {
         while (true) {
             // 0->left, 1->front, 2->right
             sensorArr = Function.CutBlueString(bluetooth[0]);
-
-
+            System.out.println("arr = " + Arrays.toString(speed));
             if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
-                if (Function.isAllZero(move, 4) && Function.isAllZero(sensorArr, 3)) {
+                if (Function.isAllZero(move, 4) && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
                     whatThreadDo[0] = "-> HOVER <-" + "  Stay_And_Warn_Dynamic";
                 }
-                else if (Function.isAllZero(move, 4) == false && Function.isAllZero(sensorArr, 3)) {
+                else if (Function.isAllZero(move, 4) == false && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
                     prevMode = droneMode[0];
                     droneMode[0] = Function.droneMode.Manual_Flight;
 
                 }
-                else if (Function.isAllZero(sensorArr, 3)== false) {
+                else if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
                     prevMode = droneMode[0];
                     droneMode[0] = Function.droneMode.Immediate_Danger;
                 }
@@ -74,26 +73,27 @@ public class ModeThread extends Thread {
             }
 
             if (droneMode[0] == Function.droneMode.Immediate_Danger) {
-                if (sensorArr[0] == 0 && sensorArr[1] != 0 && sensorArr[0] == 0) { // Front Obstacle -> Go Back
+                // 0 ---  <= speed[3]  1 --- > speed[3]
+                if (sensorArr[0] <= speed[3] && sensorArr[1] > speed[3] && sensorArr[2] <= speed[3]) { // Front Obstacle -> Go Back
                     Function.fillMoveArray(move,0,speed[0],0,0);
                     whatThreadDo[0] = "-> GO BACK ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[2] == 0) { // Left Obstacle -> Go Right
+                } else if (sensorArr[0] > speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] <= speed[3]) { // Left Obstacle -> Go Right
                     Function.fillMoveArray(move,speed[0],0,0,0);
                     whatThreadDo[0] = "-> GO RIGHT ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] == 0 && sensorArr[1] == 0 && sensorArr[2] != 0) { // Right Obstacle -> Go Left
+                } else if (sensorArr[0] <= speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] > speed[3]) { // Right Obstacle -> Go Left
                     Function.fillMoveArray(move,-speed[0],0,0,0);
                     whatThreadDo[0] = "-> GO LEFT ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] != 0 && sensorArr[1] != 0 && sensorArr[2] == 0) { // Left-Front Obstacle -> Go Right-Back
+                } else if (sensorArr[0] > speed[3] && sensorArr[1] > speed[3] && sensorArr[2] <= speed[3]) { // Left-Front Obstacle -> Go Right-Back
                     Function.fillMoveArray(move,speed[0],speed[0],0,0);
                     whatThreadDo[0] = "-> GO RIGHT-BACK ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] == 0 && sensorArr[1] != 0 && sensorArr[2] != 0) { // Right-Front Obstacle -> Go Left-Back
+                } else if (sensorArr[0] <= speed[3] && sensorArr[1] > speed[3] && sensorArr[2] > speed[3]) { // Right-Front Obstacle -> Go Left-Back
                     Function.fillMoveArray(move,-speed[0],speed[0],0,0);
                     whatThreadDo[0] = "-> GO LEFT-BACK ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] != 0 && sensorArr[1] == 0 && sensorArr[2] != 0) { // Right-Left Obstacle -> Go Straight
+                } else if (sensorArr[0] > speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] > speed[3]) { // Right-Left Obstacle -> Go Straight
                     Function.fillMoveArray(move, 0, -speed[0], 0, 0);
                     whatThreadDo[0] = "-> GO STRAIGHT ->" + "  Immediate_Danger";
                 }
-                else if (sensorArr[0] == 0 && sensorArr[1] == 0 && sensorArr[2] == 0) {
+                else if (sensorArr[0] <= speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] <= speed[3]) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
                     droneMode[0] = prevMode; // -------------------------------------------------
                 }
@@ -109,11 +109,11 @@ public class ModeThread extends Thread {
 
             if (droneMode[0] == Function.droneMode.Fly_Straight_And_Beware) {
                 whatThreadDo[0] = "Fly_Straight_And_Beware";
-                if (Function.isAllZero(sensorArr, 3)== false) {
+                if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
                     prevMode = droneMode[0];
                     droneMode[0] = Function.droneMode.Immediate_Danger;
                 }
-                else if (sensorArr[3] <= valMAX) {
+                else if (sensorArr[3] <= speed[2]) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
                     droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
                     try {
