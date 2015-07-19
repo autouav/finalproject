@@ -4,7 +4,15 @@ import java.util.StringTokenizer;
 
 public class Function {
 
-    public static final int numOfSensor = 4;
+    /*
+        0 -> IR left
+        1 -> IR front
+        2 -> IR right
+        3 -> MaxSensor front
+        4 -> GPS Lon
+        5 -> GPS Lat
+     */
+    public static final int sizeOfArray = 6;
 
     public static enum droneMode {
         Stay_And_Warn_Dynamic(1),
@@ -47,13 +55,14 @@ public class Function {
     }
 
     public static float[] CutBlueString(String bluetooth) {
-        float arr[] = new float[numOfSensor];
+        float arr[] = new float[sizeOfArray];
         int index = 0;
         StringTokenizer st = new StringTokenizer(bluetooth, ", ");
-        while (st.hasMoreTokens() && index < numOfSensor) {
+        while (st.hasMoreTokens() && index < sizeOfArray) {
             String temp = st.nextToken();
             try {
-                arr[index] = (float) Double.parseDouble(temp);
+                temp = "32.12345";
+                arr[index] = Float.parseFloat(temp);
             } catch (Exception e) {
                 arr[index] = -1;
                 System.out.println("Function.CutBlueString -> problem");

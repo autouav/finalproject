@@ -33,9 +33,9 @@ public class ModeThread extends Thread {
 
     public void run() {
         while (true) {
-            // 0->left, 1->front, 2->right
+            // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
             sensorArr = Function.CutBlueString(bluetooth[0]);
-            System.out.println("arr = " + Arrays.toString(speed));
+            System.out.println("arr = " + Arrays.toString(sensorArr));
             if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
                 if (Function.isAllZero(move, 4) && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
                     whatThreadDo[0] = "-> HOVER <-" + "  Stay_And_Warn_Dynamic";
