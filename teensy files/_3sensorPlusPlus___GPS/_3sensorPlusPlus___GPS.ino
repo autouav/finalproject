@@ -30,8 +30,8 @@ double MaxSenVal[numOfMaxSen];
 double aveOfImmSen[numOfImmSen];
 double aveOfMaxSen[numOfMaxSen];
 
-float latLocation = 0;
-float lonLocation = 0;
+double latLocation = 0;
+double lngLocation = 0;
 
 void setup()
 {
@@ -49,7 +49,7 @@ void loop()
   //printInt(gps.satellites.value(), gps.satellites.isValid(), 5);
   //printInt(gps.hdop.value(), gps.hdop.isValid(), 5);
   printFloat(gps.location.lat(), gps.location.isValid(), 11, 6);
-  printFloat(gps.location.lng(), gps.location.isValid(), 12, 6);
+  printFloatLng(gps.location.lng(), gps.location.isValid(), 12, 6);
   //printInt(gps.location.age(), gps.location.isValid(), 5);
   //printDateTime(gps.date, gps.time);
   //printFloat(gps.altitude.meters(), gps.altitude.isValid(), 7, 2);
@@ -81,7 +81,7 @@ void loop()
   //printInt(gps.charsProcessed(), true, 6);
   //printInt(gps.sentencesWithFix(), true, 10);
   //printInt(gps.failedChecksum(), true, 9);
-  Serial.println();
+  //Serial.println();
   
   smartDelay(1000);
 
@@ -111,23 +111,49 @@ static void printFloat(float val, bool valid, int len, int prec)
   if (!valid)
   {
     while (len-- > 1) {
-      Serial.print('*');
-      Serial1.print('*');
+      //Serial.print('*');
+      //Serial1.print('*');
     }
-    Serial.print(' ');
-    Serial1.print(' ');
+    //Serial.print(' ');
+    //Serial1.print(' ');
   }
   else
   {
-    Serial.print(val, prec);
-    Serial1.print(val, prec);
-    gpsLocation = val;
+    //Serial.print(val, prec);
+    //Serial1.print(val, prec);
+    latLocation = val;
     int vi = abs((int)val);
     int flen = prec + (val < 0.0 ? 2 : 1); // . and -
     flen += vi >= 1000 ? 4 : vi >= 100 ? 3 : vi >= 10 ? 2 : 1;
-    for (int i=flen; i<len; ++i)
-      Serial.print(' ');
-      Serial1.print(' ');
+    //for (int i=flen; i<len; ++i)
+      //Serial.print(' ');
+      //Serial1.print(' ');
+  }
+  smartDelay(0);
+}
+
+static void printFloatLng(float val, bool valid, int len, int prec)
+{
+  if (!valid)
+  {
+    while (len-- > 1) {
+      //Serial.print('*');
+      //Serial1.print('*');
+    }
+    //Serial.print(' ');
+    //Serial1.print(' ');
+  }
+  else
+  {
+    //Serial.print(val, prec);
+    //Serial1.print(val, prec);
+    lngLocation = val;
+    int vi = abs((int)val);
+    int flen = prec + (val < 0.0 ? 2 : 1); // . and -
+    flen += vi >= 1000 ? 4 : vi >= 100 ? 3 : vi >= 10 ? 2 : 1;
+    //for (int i=flen; i<len; ++i)
+      //Serial.print(' ');
+      //Serial1.print(' ');
   }
   smartDelay(0);
 }
@@ -221,8 +247,14 @@ void sensors_loop() {
    Serial1.print(",");
  }
  
- Serial1.print(gpsLocation);
- Serial.print(gpsLocation);
+ Serial1.print(latLocation,6);
+ Serial.print(latLocation,6);
+ 
+ Serial1.print(" ");
+ Serial.print( " ");
+ 
+ Serial1.print(lngLocation,6);
+ Serial.print(lngLocation,6);
  
  Serial1.println();
  Serial.println();
