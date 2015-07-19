@@ -6,6 +6,7 @@ import java.io.IOException;
 public class ModeThread extends Thread {
 
     private static final int valMAX = 150;
+    private static Function.droneMode prevMode;
 
     ARDrone drone;
     float move[];
@@ -24,6 +25,7 @@ public class ModeThread extends Thread {
         this.bluetooth = bluetooth;
         this.speed = speed;
         this.droneMode = droneMode;
+        prevMode = droneMode[0];
         this.whatThreadDo = whatThreadDo;
         this.getND = getND;
         this.gpc = gpc;
@@ -40,9 +42,12 @@ public class ModeThread extends Thread {
                     whatThreadDo[0] = "-> HOVER <-" + "  Stay_And_Warn_Dynamic";
                 }
                 else if (Function.isAllZero(move, 4) == false && Function.isAllZero(sensorArr, 3)) {
+                    prevMode = droneMode[0];
                     droneMode[0] = Function.droneMode.Manual_Flight;
+
                 }
                 else if (Function.isAllZero(sensorArr, 3)== false) {
+                    prevMode = droneMode[0];
                     droneMode[0] = Function.droneMode.Immediate_Danger;
                 }
             }
@@ -62,7 +67,7 @@ public class ModeThread extends Thread {
                     }
                     else {
                         Function.fillMoveArray(move, 0, 0, 0, 0);
-                        //droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
+                        prevMode = droneMode[0];
                         droneMode[0] = Function.droneMode.Fly_Straight_And_Beware;
                     }
                 }
@@ -90,13 +95,14 @@ public class ModeThread extends Thread {
                 }
                 else if (sensorArr[0] == 0 && sensorArr[1] == 0 && sensorArr[2] == 0) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
-                    droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
+                    droneMode[0] = prevMode; // -------------------------------------------------
                 }
             }
 
             if (droneMode[0] == Function.droneMode.Manual_Flight) {
                 whatThreadDo[0] = "Manual_Flight";
                 if (Function.isAllZero(move, 4)) {
+                    prevMode = droneMode[0];
                     droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
                 }
             }
@@ -104,6 +110,7 @@ public class ModeThread extends Thread {
             if (droneMode[0] == Function.droneMode.Fly_Straight_And_Beware) {
                 whatThreadDo[0] = "Fly_Straight_And_Beware";
                 if (Function.isAllZero(sensorArr, 3)== false) {
+                    prevMode = droneMode[0];
                     droneMode[0] = Function.droneMode.Immediate_Danger;
                 }
                 else if (sensorArr[3] <= valMAX) {

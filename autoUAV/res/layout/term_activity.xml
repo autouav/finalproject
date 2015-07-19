@@ -188,10 +188,41 @@
                       android:textAppearance="?android:attr/textAppearanceMedium" android:text="Tilt     "
                       android:id="@+id/tiltJustText" android:layout_weight="0.10" android:gravity="center"/>
             <SeekBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tiltBar"
-                     android:layout_weight="1" android:max="30" android:progress="3" android:indeterminate="false"/>
+                     android:layout_weight="1" android:max="30" android:progress="5" android:indeterminate="false"/>
             <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
-                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="10"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="5"
                       android:id="@+id/tiltNum" android:layout_weight="0.16" android:gravity="center"/>
+        </LinearLayout>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Sensors:"
+                android:id="@+id/sensorsText" android:layout_gravity="center" android:gravity="center"/>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                      android:layout_height="wrap_content" android:id="@+id/linearLayout2"
+                      android:layout_gravity="center_horizontal">
+            <TextView android:layout_width="wrap_content" android:layout_height="37dp"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="MaxSonar    "
+                      android:id="@+id/maxSenText" android:layout_weight="0.10" android:gravity="center"/>
+            <SeekBar android:layout_width="wrap_content" android:layout_height="wrap_content"
+                     android:id="@+id/MaxSenBar" android:layout_weight="1" android:max="400" android:progress="150"
+                     android:indeterminate="false"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="200"
+                      android:id="@+id/MaxSenNum" android:layout_weight="0.16" android:gravity="center"/>
+        </LinearLayout>
+        <LinearLayout android:orientation="horizontal" android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/linearLayout">
+            <TextView android:layout_width="wrap_content" android:layout_height="37dp"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="Immediately"
+                      android:id="@+id/ImmText" android:layout_weight="0.10" android:gravity="center"/>
+            <SeekBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ImmSenBar"
+                     android:layout_weight="1" android:max="400" android:progress="150" android:indeterminate="false"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="150"
+                      android:id="@+id/ImSenNum" android:layout_weight="0.16" android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
 
