@@ -34,6 +34,8 @@ import android.util.Log;
 import com.codeminders.ardrone.ARDrone;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -358,6 +360,8 @@ public class BlueTerm extends Activity {
         map.setMyLocationEnabled(true);
 
         myPosition = new MarkerOptions();
+        // Changing marker icon
+        myPosition.icon(BitmapDescriptorFactory.fromResource(R.drawable.parrot_ardrone_06));
 
         try {
             drone = new ARDrone();
@@ -418,7 +422,8 @@ public class BlueTerm extends Activity {
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                //map.clear();
+                map.clear();
+                myPosition.rotation(getND.Yaw);
                 map.addMarker(myPosition);
             }
         });
