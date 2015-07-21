@@ -292,7 +292,9 @@ public class BlueTerm extends Activity {
         dMode[0] = Function.droneMode.Find_Azimuth;
     }
 
-
+    public void clearMap(View v) {
+        map.clear();
+    }
 
 	/** Called when the activity is first created. */
 	@Override
@@ -412,12 +414,11 @@ public class BlueTerm extends Activity {
 
         LatLng point = new LatLng(32.167694,35.085476);
         myPosition.position(point);
-        //map.clear();
-        //map.addMarker(myPosition);
+
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                map.clear();
+                //map.clear();
                 map.addMarker(myPosition);
             }
         });
