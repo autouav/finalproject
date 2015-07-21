@@ -69,8 +69,8 @@ public class ModeThread extends Thread {
                     if (aziFix < 0) aziFix += 360;
 
                     if (aziFix < 350 && aziFix > 10) {
-                        if (aziFix>180 && aziFix<360) Function.fillMoveArray(move, 0,0,0,speed[0]); // drone.move(0,0,0,speed[0]);
-                        else Function.fillMoveArray(move, 0, 0, 0, -speed[0]); // drone.move(0,0,0,-speed[0]);
+                        if (aziFix>180 && aziFix<360) Function.fillMoveArray(move, 0,0,0,speed[0]);
+                        else Function.fillMoveArray(move, 0, 0, 0, -speed[0]);
                     }
                     else {
                         Function.fillMoveArray(move, 0, 0, 0, 0);
@@ -140,9 +140,6 @@ public class ModeThread extends Thread {
                 myPosition.position(point);
             }
         }
-
-
-
     }
 }
 

@@ -35,11 +35,11 @@ public class Cords {
 	 */
 	public static double[] flatWorldDist(GpsPoint ll1, GpsPoint ll2) {
 		double[] ans = new double[3];
-		double dx = ll2.Lon-ll1.Lon; // delta lon east
-		double dy = ll2.Lat-ll1.Lat; // delta lat north
-		double dz = ll2.Alt-ll1.Alt; // delta al`tr
+		double dx = ll2.getLon()-ll1.getLon(); // delta lon east
+		double dy = ll2.getLat()-ll1.getLat(); // delta lat north
+		double dz = ll2.getAlt()-ll1.getAlt(); // delta al`tr
 		if(Math.abs(dx)>0.1 | Math.abs(dy)>0.1) {return null;}
-		double x = EARTH_RADIUS * Math.toRadians(dx) * Math.cos(Math.toRadians(ll1.Lon));
+		double x = EARTH_RADIUS * Math.toRadians(dx) * Math.cos(Math.toRadians(ll1.getLon()));
 		double y = EARTH_RADIUS * Math.toRadians(dy);
 		ans[0] = x; ans[1]=y; ans[2] = dz;
 		return ans;
@@ -81,9 +81,9 @@ public class Cords {
 			//throw new RuntimeException ("ERR: the offset vectr os too big (more than 100km) - can not be assumed as flat world");
 			return null;
 		}
-		double lon = vec[0]/(EARTH_RADIUS * Math.cos(Math.toRadians(ll1.Lon)));
+		double lon = vec[0]/(EARTH_RADIUS * Math.cos(Math.toRadians(ll1.getLon())));
 		double lat = vec[1]/EARTH_RADIUS;
-		GpsPoint gp = new GpsPoint(ll1.Lon+Math.toDegrees(lon),ll1.Lat+Math.toDegrees(lat),ll1.Alt+dz);
+		GpsPoint gp = new GpsPoint(ll1.getLon()+Math.toDegrees(lon),ll1.getLat()+Math.toDegrees(lat),ll1.getAlt()+dz);
 		return gp;
 	}
 

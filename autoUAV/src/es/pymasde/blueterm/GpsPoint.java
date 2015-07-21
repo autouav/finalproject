@@ -1,23 +1,38 @@
 package es.pymasde.blueterm;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class GpsPoint {
 
-    double Lon, Lat, Alt;
+    private double Alt;
+    private LatLng point;
 
-    public GpsPoint(double lon, double lat) {
-        Lon = lon;
-        Lat = lat;
+    public GpsPoint(double lat, double lon) {
+        point = new LatLng(lat,lon);
         Alt = 0;
     }
 
-    public GpsPoint(double lon, double lat, double alt) {
-        Lon = lon;
-        Lat = lat;
+    public GpsPoint(double lat, double lon, double alt) {
+        point = new LatLng(lat,lon);
         Alt = alt;
     }
 
+    public double getLat() {
+        return point.latitude;
+    }
+
+    public double getLon() {
+        return point.longitude;
+    }
+
+    public double getAlt() {
+        return Alt;
+    }
+
+
+
     public String toString() {
-        return Lon+","+Lat;
+        return point.toString();
     }
 
 }
