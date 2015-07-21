@@ -1,5 +1,8 @@
 package es.pymasde.blueterm;
 import com.codeminders.ardrone.ARDrone;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,8 +21,11 @@ public class ModeThread extends Thread {
     GpsPointContainer gpc;
     getNavData getND;
 
+    public GoogleMap map;
+    public MarkerOptions myPosition;
 
-    public ModeThread(ARDrone drone, float move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[], GpsPointContainer gpc, getNavData getND) {
+
+    public ModeThread(ARDrone drone, float move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[], GpsPointContainer gpc, getNavData getND, GoogleMap map, MarkerOptions myPosition) {
         this.drone = drone;
         this.move = move;
         this.bluetooth = bluetooth;
@@ -29,13 +35,15 @@ public class ModeThread extends Thread {
         this.whatThreadDo = whatThreadDo;
         this.getND = getND;
         this.gpc = gpc;
+        this.map = map;
+        this.myPosition = myPosition;
     }
 
     public void run() {
         while (true) {
             // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
             sensorArr = Function.CutBlueString(bluetooth[0]);
-            System.out.println("arr = " + Arrays.toString(sensorArr));
+            //System.out.println("arr = " + Arrays.toString(sensorArr));
             if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
                 if (Function.isAllZero(move, 4) && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
                     whatThreadDo[0] = "-> HOVER <-" + "  Stay_And_Warn_Dynamic";
@@ -125,6 +133,11 @@ public class ModeThread extends Thread {
                 else {
                     Function.fillMoveArray(move, 0, -speed[0], 0, 0);
                 }
+            }
+
+            if (sensorArr[5] > 20 && sensorArr[5] < 50 && sensorArr[4] > 20 && sensorArr[4] < 50) {
+                LatLng point = new LatLng((double) sensorArr[4], (double) sensorArr[5]);
+                myPosition.position(point);
             }
         }
 

@@ -9,10 +9,8 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
+import android.location.Location;
+import android.os.*;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -36,6 +34,8 @@ import android.util.Log;
 import com.codeminders.ardrone.ARDrone;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 public class BlueTerm extends Activity {
@@ -74,7 +74,8 @@ public class BlueTerm extends Activity {
 
     GpsPoint droneLocation;
     GpsPointContainer gpc;
-    private GoogleMap map;
+    public static GoogleMap map;
+    public static MarkerOptions myPosition;
 
     //
 
@@ -350,6 +351,12 @@ public class BlueTerm extends Activity {
         emulatorview = (EmulatorView) findViewById(R.id.emulatorView);
         //emulatorview.setVisibility(View.GONE);
 
+        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        map.setMyLocationEnabled(true);
+
+        myPosition = new MarkerOptions();
+
         try {
             drone = new ARDrone();
             Thread.sleep(500);
@@ -399,12 +406,21 @@ public class BlueTerm extends Activity {
         moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
         droneLocation = new GpsPoint(35.0852831, 32.1675153);//(35.209722, 32.102935);
         gpc = new GpsPointContainer(droneLocation);
-        modeThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND);
+        modeThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND, map, myPosition);
         moveThread = new MoveThread(drone,move,speed);
 
-        map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        map.setMyLocationEnabled(true);
+
+        LatLng point = new LatLng(32.167694,35.085476);
+        myPosition.position(point);
+        //map.clear();
+        //map.addMarker(myPosition);
+        map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                map.clear();
+                map.addMarker(myPosition);
+            }
+        });
         //
 	}
 
