@@ -361,7 +361,7 @@ public class BlueTerm extends Activity {
 
         myPosition = new MarkerOptions();
         // Changing marker icon
-        myPosition.icon(BitmapDescriptorFactory.fromResource(R.drawable.parrot_ardrone_06));
+        myPosition.icon(BitmapDescriptorFactory.fromResource(R.drawable.ardrone_new));
 
         try {
             drone = new ARDrone();
