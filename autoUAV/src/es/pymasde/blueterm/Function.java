@@ -61,7 +61,6 @@ public class Function {
         while (st.hasMoreTokens() && index < sizeOfArray) {
             String temp = st.nextToken();
             try {
-                temp = "32.12345";
                 arr[index] = Float.parseFloat(temp);
             } catch (Exception e) {
                 arr[index] = -1;
