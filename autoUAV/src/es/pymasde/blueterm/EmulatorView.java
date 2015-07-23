@@ -159,7 +159,8 @@ class EmulatorView extends View implements GestureDetector.OnGestureListener {
         public void handleMessage(Message msg) {
             if (msg.what == UPDATE) {
                 update();
-                BlueTerm.navDataText.setText("---> NAV DATA <---:\n" + BlueTerm.navData[0]);
+                BlueTerm.navDataText.setText("---> NAV DATA <---\n" + BlueTerm.navData[0] + "\n" + BlueTerm.gpc.getDroneGpsDataString());
+
                 BlueTerm.moveThreadDo.setText(BlueTerm.moveThreadDoString[0]);
             }
         }

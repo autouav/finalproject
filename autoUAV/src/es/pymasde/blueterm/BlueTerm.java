@@ -74,7 +74,7 @@ public class BlueTerm extends Activity {
     Function.droneMode dMode[] = new Function.droneMode[1];
 
     GpsPoint droneLocation;
-    GpsPointContainer gpc;
+    public static GpsPointContainer gpc;
     public static GoogleMap map;
     public static MarkerOptions myPosition;
     PolylineOptions rectOptions;

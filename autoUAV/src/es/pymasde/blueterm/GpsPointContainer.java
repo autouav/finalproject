@@ -11,11 +11,13 @@ import java.util.LinkedList;
 public class GpsPointContainer {
 
     private GpsPoint droneLocation;
+    private String droneGpsDataString;
     private LinkedList<GpsPoint> listPoint;
     private LinkedList<LatLng> latLngList;
 
     public GpsPointContainer(GpsPoint droneLocation) {
         this.droneLocation = droneLocation;
+        droneGpsDataString = "---> None GPS distance data <---\n";
         listPoint = new LinkedList<GpsPoint>();
         latLngList = new LinkedList<LatLng>();
         /*
@@ -93,5 +95,17 @@ public class GpsPointContainer {
 
     public GpsPoint getDroneLocation() {
         return droneLocation;
+    }
+
+    public void setDroneGpsDataString(String data) {
+        droneGpsDataString = data;
+    }
+
+    public String getDroneGpsDataString() {
+        return droneGpsDataString;
+    }
+
+    public void resetDroneGpsDataString() {
+        droneGpsDataString = "---> None GPS distance data <---\n";
     }
 }
