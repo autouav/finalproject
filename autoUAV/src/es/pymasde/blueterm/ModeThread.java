@@ -140,6 +140,14 @@ public class ModeThread extends Thread {
                 LatLng point = new LatLng((double) sensorArr[4], (double) sensorArr[5]);
                 gpc.setDroneLocation(point);
                 myPosition.position(point);
+                if (gpc.isEmpty() == false) {
+                    double tempData[] = Cords.azmDist(gpc.getLocation(), gpc.getFirst());
+                    String distance = String.format("%.2f",tempData[1]);
+                    gpc.setDroneGpsDataString("---> GPS distance data <---\nthe Distance to the next point is: " + distance +" Meters");
+                }
+                else {
+                    gpc.resetDroneGpsDataString();
+                }
             }
         }
     }
