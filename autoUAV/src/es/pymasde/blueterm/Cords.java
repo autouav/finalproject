@@ -38,7 +38,7 @@ public class Cords {
 		double dx = ll2.getLon()-ll1.getLon(); // delta lon east
 		double dy = ll2.getLat()-ll1.getLat(); // delta lat north
 		double dz = ll2.getAlt()-ll1.getAlt(); // delta al`tr
-		if(Math.abs(dx)>0.1 | Math.abs(dy)>0.1) {return null;}
+		if(Math.abs(dx)>0.3 | Math.abs(dy)>0.3) {return null;}
 		double x = EARTH_RADIUS * Math.toRadians(dx) * Math.cos(Math.toRadians(ll1.getLon()));
 		double y = EARTH_RADIUS * Math.toRadians(dy);
 		ans[0] = x; ans[1]=y; ans[2] = dz;
@@ -148,8 +148,8 @@ public class Cords {
 	public static void main(String[] arg) {
 
 		double ans[] = new double[3];
-		GpsPoint p1 = new GpsPoint(35.209687, 32.10283, 680);
-		GpsPoint p2 = new GpsPoint(35.20954, 32.10368, 685);
+		GpsPoint p1 = new GpsPoint(32.10283, 35.209687, 680);
+		GpsPoint p2 = new GpsPoint(32.10368, 35.20954, 685);
 		ans = azmDist(p1,p2);
 		//ans = flatWorldDist(p1,p2);
 

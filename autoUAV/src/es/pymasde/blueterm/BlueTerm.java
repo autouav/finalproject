@@ -417,14 +417,15 @@ public class BlueTerm extends Activity {
         dMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
         moveThreadDoString = new String[1];
         moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
-        droneLocation = new GpsPoint(35.0852831, 32.1675153);//(35.209722, 32.102935);
+
+        // default GPS point - until the GPS is calibration
+        droneLocation = new GpsPoint(32.1675153,35.0852831);//(32.102935, 35.209722);
+
         gpc = new GpsPointContainer(droneLocation);
         modeThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND, map, myPosition);
         moveThread = new MoveThread(drone,move,speed);
 
-
-        LatLng point = new LatLng(32.167694,35.085476);
-        myPosition.position(point);
+        myPosition.position(gpc.getDroneLocation().getLatLng());
 
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override

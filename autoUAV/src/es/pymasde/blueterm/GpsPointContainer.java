@@ -21,7 +21,7 @@ public class GpsPointContainer {
         /*
          ------------------------------------------just for test
           */
-        //GpsPoint gp = new GpsPoint(35.086128,32.167524);//(35.0852831, 32.1675153);
+        //GpsPoint gp = new GpsPoint(32.167524, 35.086128);//(32.1675153, 35.0852831);
         //listPoint.add(gp);
     }
 
@@ -33,8 +33,8 @@ public class GpsPointContainer {
     public boolean isEmpty() {return listPoint.isEmpty();}
 
     public void addFootBallList() {
-        GpsPoint gp1 = new GpsPoint(35.208137,32.105368);
-        GpsPoint gp2 = new GpsPoint(35.208568,32.105648);
+        GpsPoint gp1 = new GpsPoint(32.105368, 35.208137);
+        GpsPoint gp2 = new GpsPoint(32.105648, 35.208568);
         listPoint.clear();
         listPoint.add(gp1);
         listPoint.add(gp2);
@@ -85,5 +85,13 @@ public class GpsPointContainer {
 
     public LinkedList<LatLng> getLatLngList() {
         return latLngList;
+    }
+
+    public void setDroneLocation(LatLng point) {
+        droneLocation = new GpsPoint(point.latitude,point.longitude);
+    }
+
+    public GpsPoint getDroneLocation() {
+        return droneLocation;
     }
 }

@@ -43,6 +43,7 @@ public class ModeThread extends Thread {
         while (true) {
             // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
             sensorArr = Function.CutBlueString(bluetooth[0]);
+
             //System.out.println("arr = " + Arrays.toString(sensorArr));
             if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
                 if (Function.isAllZero(move, 4) && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
@@ -137,6 +138,7 @@ public class ModeThread extends Thread {
 
             if (sensorArr[5] > 20 && sensorArr[5] < 50 && sensorArr[4] > 20 && sensorArr[4] < 50) {
                 LatLng point = new LatLng((double) sensorArr[4], (double) sensorArr[5]);
+                gpc.setDroneLocation(point);
                 myPosition.position(point);
             }
         }
