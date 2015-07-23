@@ -9,6 +9,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.*;
 import android.preference.PreferenceManager;
@@ -35,9 +36,7 @@ import com.codeminders.ardrone.ARDrone;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.*;
 
 
 public class BlueTerm extends Activity {
@@ -78,6 +77,9 @@ public class BlueTerm extends Activity {
     GpsPointContainer gpc;
     public static GoogleMap map;
     public static MarkerOptions myPosition;
+    PolylineOptions rectOptions;
+    Polyline polyline;
+    static int marksCount = 0;
 
     //
 
@@ -295,7 +297,12 @@ public class BlueTerm extends Activity {
     }
 
     public void clearMap(View v) {
+        marksCount = 0;
+
         map.clear();
+        gpc.emptyList();
+        rectOptions = null;
+        polyline = null;
     }
 
 	/** Called when the activity is first created. */
@@ -422,13 +429,101 @@ public class BlueTerm extends Activity {
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                map.clear();
+                //map.clear();
                 myPosition.rotation(getND.Yaw);
                 map.addMarker(myPosition);
             }
         });
-        //
+
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+
+            @Override
+            public void onMapLongClick(LatLng location) {
+                marksCount++;
+
+                MarkerOptions m = new MarkerOptions();
+                m.position(location)
+                        .draggable(true)
+                        .title(location.toString() + " " + marksCount)
+                        .snippet("Tap here to remove this marker");
+
+                map.addMarker(m);
+
+                gpc.add(new GpsPoint(location));
+
+                if (gpc.getListPointSize() == 1)
+                    rectOptions = new PolylineOptions().add(location);
+                else {
+                    rectOptions.add(location);
+                    rectOptions.color(Color.RED);
+                    polyline = map.addPolyline(rectOptions);
+                }
+            }
+        });
+
+        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            int indexOfOldPosition = 0;
+
+            @Override
+            public void onMarkerDragStart(Marker m) {
+                String index = m.getTitle().split(" ")[2];
+                //String[] indexArray = index.split(" ");
+                //index = indexArray[2];
+
+                //indexOfOldPosition = LatLngList.indexOf(m.getPosition());
+                indexOfOldPosition = Integer.parseInt(index) - 1;
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker m) {
+                m.setTitle(m.getPosition().toString() + " " + indexOfOldPosition);
+                if (indexOfOldPosition > -1) {
+                    gpc.getLatLngList().set(indexOfOldPosition, m.getPosition());
+
+                    // update UI
+                    updateUI();
+                }
+            }
+
+            @Override
+            public void onMarkerDrag(Marker m) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                // Remove the marker
+                marker.remove();
+                gpc.remove(marker.getPosition());
+                marksCount--;
+
+                updateUI();
+            }
+        });
+
 	}
+
+    protected void updateUI() {
+        map.clear();
+
+        for (int i = 0; i < gpc.getListPointSize(); i++) {
+            MarkerOptions m = new MarkerOptions();
+            m.position(gpc.getLatLngList().get(i))
+                    .draggable(true)
+                    .title(gpc.getLatLngList().get(i).toString() + " " + (i + 1))
+                    .snippet("Tap here to remove this marker");
+
+            map.addMarker(m);
+        }
+
+        rectOptions = new PolylineOptions().addAll(gpc.getLatLngList());
+        rectOptions.color(Color.RED);
+        polyline = map.addPolyline(rectOptions);
+    }
 
 	@Override
 	public void onStart() {

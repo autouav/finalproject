@@ -17,6 +17,10 @@ public class GpsPoint {
         Alt = alt;
     }
 
+    public GpsPoint(LatLng location) {
+        this(location.latitude, location.longitude);
+    }
+
     public double getLat() {
         return point.latitude;
     }
@@ -29,7 +33,9 @@ public class GpsPoint {
         return Alt;
     }
 
-
+    public LatLng getLatLng() {
+        return point;
+    }
 
     public String toString() {
         return point.toString();

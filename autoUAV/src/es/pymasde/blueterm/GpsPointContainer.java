@@ -4,25 +4,30 @@ package es.pymasde.blueterm;
  * Created by zohar on 12/07/2015.
  */
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.LinkedList;
 
 public class GpsPointContainer {
 
     private GpsPoint droneLocation;
     private LinkedList<GpsPoint> listPoint;
+    private LinkedList<LatLng> latLngList;
 
     public GpsPointContainer(GpsPoint droneLocation) {
         this.droneLocation = droneLocation;
         listPoint = new LinkedList<GpsPoint>();
+        latLngList = new LinkedList<LatLng>();
         /*
          ------------------------------------------just for test
           */
-        GpsPoint gp = new GpsPoint(35.086128,32.167524);//(35.0852831, 32.1675153);
-        listPoint.add(gp);
+        //GpsPoint gp = new GpsPoint(35.086128,32.167524);//(35.0852831, 32.1675153);
+        //listPoint.add(gp);
     }
 
     public void add(GpsPoint gp) {
         listPoint.add(gp);
+        latLngList.add(gp.getLatLng());
     }
 
     public boolean isEmpty() {return listPoint.isEmpty();}
@@ -37,12 +42,23 @@ public class GpsPointContainer {
 
     public GpsPoint removeFirst() {
         GpsPoint gp = listPoint.removeFirst();
+        latLngList.removeFirst();
         return gp;
     }
 
     public GpsPoint getFirst() {
         GpsPoint gp = listPoint.getFirst();
         return gp;
+    }
+
+    public void remove(LatLng location) {
+        for (int i = 0; i < getListPointSize(); i++) {
+            if (listPoint.get(i).getLat() == location.latitude && listPoint.get(i).getLon() == location.longitude) {
+                listPoint.remove(i);
+                latLngList.remove(i);
+                break;
+            }
+        }
     }
 
     public GpsPoint getLocation() {
@@ -60,7 +76,14 @@ public class GpsPointContainer {
         return str;
     }
 
+    public int getListPointSize() { return listPoint.size(); }
 
+    public void emptyList() {
+        listPoint.clear();
+        latLngList.clear();
+    }
 
-
+    public LinkedList<LatLng> getLatLngList() {
+        return latLngList;
+    }
 }
