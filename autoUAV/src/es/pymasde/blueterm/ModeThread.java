@@ -145,9 +145,8 @@ public class ModeThread extends Thread {
                     String distance = String.format("%.2f",tempData[1]);
                     gpc.setDroneGpsDataString("---> GPS distance data <---\nthe Distance to the next point is: " + distance +" Meters");
                 }
-                else {
-                    gpc.resetDroneGpsDataString();
-                }
+                else gpc.resetDroneGpsDataString();
+
             }
         }
     }
