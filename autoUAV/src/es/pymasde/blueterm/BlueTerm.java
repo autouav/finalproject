@@ -41,47 +41,70 @@ import com.google.android.gms.maps.model.*;
 
 public class BlueTerm extends Activity {
 
-    // Our Var
-    public static EmulatorView emulatorview;
-    public static int connect = 0;
-    public static ARDrone drone;
-    public static TextView navDataText;
-    boolean takeOff = false;
-    Button takeOffLand;
+    // ======================================================== Our Variables ========================================================
+    public static EmulatorView emulatorview;        // ask Naor <--------------------------------------------
+    public static int connect = 0;                  // As above
 
-    public static String navData[];
-    getNavData getND;
+    protected static ARDrone drone;                 // on this object we operate all functions of flying and get NavData.
+    protected static TextView navDataText;          // in this TextView We update the information that received from the Drone and the GPS.
+    protected boolean takeOff = false;              // flag variable.
+    protected Button takeOffLand;                   // need to set the text of the Button - takeOff <-> Land.
 
-    Keyboard keyboard;
-    SeekBar speedBar;
-    TextView speedNum;
-    SeekBar tiltBar;
-    TextView tiltNum;
+    protected static String navData[];              // String Object - to display the NavData.
+    protected getNavData getND;                     // in this Object we get and set all the NavData from the drone.
 
-    SeekBar MaxSenBar;
-    TextView MaxSenNum;
-    SeekBar ImmSenBar;
-    TextView ImmSenNum;
+    protected Keyboard keyboard;                    // look in Keyboard class for more info.
+    protected LinearLayout ll;                      // represents the layout of the Keyboard
+    // Objects to set the speed of move function and tilt max angle.
+    protected SeekBar speedBar;
+    protected TextView speedNum;
+    protected SeekBar tiltBar;
+    protected TextView tiltNum;
 
-    public static Thread modeThread;
-    public static Thread moveThread;
-    public static TextView moveThreadDo;
-    public static String moveThreadDoString[] = new String[1];
+    // Objects to set the sensor sensitivity
+    protected SeekBar MaxSenBar;
+    protected TextView MaxSenNum;
+    protected SeekBar ImmSenBar;
+    protected TextView ImmSenNum;
 
-    float move[] = new float[4];
-    public static String bluetooth[] = new String[1];
-    float speed[] = {5,10,200,200};
-    Function.droneMode dMode[] = new Function.droneMode[1];
+    protected static Thread modeThread;             // this Thread Switch modes according to the algorithm we built.
+    protected static Thread moveThread;             // this is very simple Thread - move the drone according to four values
 
-    GpsPoint droneLocation;
-    public static GpsPointContainer gpc;
-    public static GoogleMap map;
-    public static MarkerOptions myPosition;
-    PolylineOptions rectOptions;
-    Polyline polyline;
-    static int marksCount = 0;
+    // objects to show on the App screen - what the drone do now
+    protected static TextView moveThreadDo;
+    protected static String moveThreadDoString[] = new String[1];
 
-    //
+    /*
+        this array represents the four values to flight the ARDrone:
+        0 ->    (-) left        |       (+) right
+        1 ->    (-) front       |       (+) back
+        2 ->    (-) down        |       (+) up
+        3 ->    (-) yae-left    |       (+) yaw-right
+     */
+    protected float move[] = new float[4];
+    protected static String bluetooth[] = new String[1];                // An object that represents a stream from the Bluetooth
+
+    /*
+        this array represents a number of indicators:
+        0 ->    the value that sent to the move function
+        1 ->    the maximum tilt angle of the ARDrone
+        2 ->    IR maximum value - to set the drone mode in "Immediately Danger"
+        3 ->    Sonar maximum value - to identify an obstacle
+     */
+    protected float indicatArray[] = {5,10,200,200};
+
+    protected Function.droneMode dMode[] = new Function.droneMode[1];   // An object that represents the mode of the ARDrone
+
+    protected GpsPoint droneLocation;                                   // via GPS that connected to Teensy
+    protected static GpsPointContainer gpc;                             // this object save all check-point and the drone location
+    protected static GoogleMap map;                                     // map for the App
+    protected static MarkerOptions myPosition;                          // represents the ARDrone on the map
+
+    protected PolylineOptions rectOptions;                              // ask Naor <--------------------------------------------
+    protected Polyline polyline;                                        // ask Naor <--------------------------------------------
+    protected static int marksCount = 0;                                // ask Naor <--------------------------------------------
+
+    // ===============================================================================================================================
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
@@ -196,8 +219,12 @@ public class BlueTerm extends Activity {
     
     private Dialog         mAboutDialog;
 
-    // Our Function
 
+    // ======================================================== Our function =========================================================
+
+    /**
+     * This function (Button) makes the ARDrone can fly, if there are problems - This function attempts to solve them
+     */
     public void Bready(View v) {
         try {
             drone.playLED(2,10,2);
@@ -212,9 +239,13 @@ public class BlueTerm extends Activity {
             e.printStackTrace();
             System.out.println("Bready -> problem");
         }
-
     }
 
+    /**
+     * This function (Button) causes the ARDrone to takeOff.
+     * beyond that -    (1) take the NavData from the ARDrone
+     *                  (2) start the Threads: Move and Mode that we created.
+     */
     public void takeOff(View v) {
         try {
             if (!takeOff) {
@@ -241,61 +272,97 @@ public class BlueTerm extends Activity {
         }
     }
 
+    /**
+     * This function (Button) run the function "setVis" to displaying or hiding the keyboard that control the ARDrone
+     */
     public void keyboard(View v) {
         keyboard.setVis();
     }
 
-
-
+    /**
+     * the Button "front" is pressed
+     */
     public void goFront(View v) {
         moveThreadDoString[0] = "-> GO FRONT ->";
-        Function.fillMoveArray(move, 0, (int) ((-1) * speed[0]), 0, 0);
+        Function.fillMoveArray(move, 0, (int) ((-1) * indicatArray[0]), 0, 0);
     }
 
+    /**
+     * the Button "back" is pressed
+     */
     public void goBack(View v) {
         moveThreadDoString[0] = "-> GO BACK ->";
-        Function.fillMoveArray(move, 0, (int) speed[0], 0, 0);
+        Function.fillMoveArray(move, 0, (int) indicatArray[0], 0, 0);
     }
 
+    /**
+     * the Button "right" is pressed
+     */
     public void goRight(View v) {
         moveThreadDoString[0] = "-> GO Right ->";
-        Function.fillMoveArray(move, (int) speed[0], 0, 0, 0);
+        Function.fillMoveArray(move, (int) indicatArray[0], 0, 0, 0);
     }
 
+    /**
+     * the Button "left" is pressed
+     */
     public void goLeft(View v) {
         moveThreadDoString[0] = "-> GO Left ->";
-        Function.fillMoveArray(move, (int) ((-1) * speed[0]), 0, 0, 0);
+        Function.fillMoveArray(move, (int) ((-1) * indicatArray[0]), 0, 0, 0);
     }
 
+    /**
+     * the Button "hover" is pressed
+     */
     public void hover(View v) {
         moveThreadDoString[0] = "-> HOVER <-";
         Function.fillMoveArray(move, 0, 0, 0, 0);
     }
 
+    /**
+     * the Button "up" is pressed
+     */
     public void goUp(View v) {
         moveThreadDoString[0] = "-> GO UP <-";
-        Function.fillMoveArray(move, 0, 0, (int) speed[0], 0);
+        Function.fillMoveArray(move, 0, 0, (int) indicatArray[0], 0);
     }
 
+
+    /**
+     * the Button "down" is pressed
+     */
     public void goDown(View v) {
         moveThreadDoString[0] = "-> GO DOWN <-";
-        Function.fillMoveArray(move, 0, 0, (int) ((-1) * speed[0]), 0);
+        Function.fillMoveArray(move, 0, 0, (int) ((-1) * indicatArray[0]), 0);
     }
 
+    /**
+     * the Button "YawRight" is pressed
+     */
     public void goYawRight(View v) {
         moveThreadDoString[0] = "-> GO YAW RIGHT <-";
-        Function.fillMoveArray(move, 0, 0, 0, (int) ((-1) * speed[0]));
+        Function.fillMoveArray(move, 0, 0, 0, (int) ((-1) * indicatArray[0]));
     }
 
+    /**
+     * the Button "YawLeft" is pressed
+     */
     public void goYawLeft(View v) {
         moveThreadDoString[0] = "-> GO YAW LEFT <-";
-        Function.fillMoveArray(move, 0, 0, 0, (int) speed[0]);
+        Function.fillMoveArray(move, 0, 0, 0, (int) indicatArray[0]);
     }
 
+    /**
+     * the Button "findAzi" is pressed
+     * this function just set the drone Mode - to find the azimut to the next point
+     */
     public void findAzi(View v) {
         dMode[0] = Function.droneMode.Find_Azimuth;
     }
 
+    /**
+     *      ask Naor <--------------------------------------------
+     */
     public void clearMap(View v) {
         marksCount = 0;
 
@@ -304,6 +371,8 @@ public class BlueTerm extends Activity {
         rectOptions = null;
         polyline = null;
     }
+
+    // ===============================================================================================================================
 
 	/** Called when the activity is first created. */
 	@Override
@@ -357,8 +426,9 @@ public class BlueTerm extends Activity {
 		if (DEBUG)
 			Log.e(LOG_TAG, "+++ DONE IN ON CREATE +++");
 
-        //
+        // ================================================== Our setting -> onCreate ====================================================
 
+        // ask Naor <--------------------------------------------
         emulatorview = (EmulatorView) findViewById(R.id.emulatorView);
         //emulatorview.setVisibility(View.GONE);
 
@@ -366,10 +436,10 @@ public class BlueTerm extends Activity {
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setMyLocationEnabled(true);
 
-        myPosition = new MarkerOptions();
-        // Changing marker icon
-        myPosition.icon(BitmapDescriptorFactory.fromResource(R.drawable.ardrone_new));
+        myPosition = new MarkerOptions();                                                   // create marker that represents the ARDrone.
+        myPosition.icon(BitmapDescriptorFactory.fromResource(R.drawable.ardrone_new));      // Changing marker icon
 
+        // trying to connect to the ARDrone. very important - Smartphone must be connected to WIFI before running the App.
         try {
             drone = new ARDrone();
             Thread.sleep(500);
@@ -385,48 +455,55 @@ public class BlueTerm extends Activity {
             e.printStackTrace();
         }
 
+
+        // ===================== findViewById =====================
         takeOffLand = (Button) findViewById(R.id.TakeOff);
         navDataText = (TextView) findViewById(R.id.NavData);
-
-        navData = new String[1];
-        navData[0] = "";
-        getND = new getNavData(drone,navData);
-
-        LinearLayout ll = (LinearLayout) findViewById(R.id.keyboard);
+        ll = (LinearLayout) findViewById(R.id.keyboard);
         speedBar = (SeekBar) findViewById(R.id.speedBar);
         speedNum = (TextView) findViewById(R.id.speedNum);
         tiltBar = (SeekBar) findViewById(R.id.tiltBar);
         tiltNum = (TextView) findViewById(R.id.tiltNum);
-
         MaxSenBar = (SeekBar) findViewById(R.id.MaxSenBar);
         MaxSenNum = (TextView) findViewById(R.id.MaxSenNum);
         ImmSenBar = (SeekBar) findViewById(R.id.ImmSenBar);
         ImmSenNum = (TextView) findViewById(R.id.ImSenNum);
+        moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
+        // ========================================================
 
+        // set object to get the NavData:
+        navData = new String[1];
+        navData[0] = "";
+        getND = new getNavData(drone,navData);
+
+        // this arrays sent to Keyboard object
         SeekBar[] seekBars = {speedBar, tiltBar, MaxSenBar, ImmSenBar};
         TextView[] textBars = {speedNum, tiltNum, MaxSenNum, ImmSenNum};
+        keyboard = new Keyboard(drone,ll,seekBars,textBars,indicatArray);
 
-
-        keyboard = new Keyboard(drone,ll,seekBars,textBars,speed);
-
+        // set the values of the move-array to zero -> the Mode of the ARDrone is Stay And Warn Dynamic
         Function.fillMoveArray(move, 0, 0, 0, 0);
-        bluetooth[0] = "0,0,0,0";
-
-        //System.out.println("speed -> " + keyboard.num.getText().toString());
-        //Toast.makeText(BlueTerm.this,"hello",Toast.LENGTH_SHORT).show();
         dMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
-        moveThreadDoString = new String[1];
-        moveThreadDo = (TextView) findViewById(R.id.moveThreadDo);
 
-        // default GPS point - until the GPS is calibration
-        droneLocation = new GpsPoint(32.1675153,35.0852831);//(32.102935, 35.209722);
+        // default Stream bluetooth - until the Bluetooth will be sent information.
+        bluetooth[0] = "0,0,0,0,0,0";
 
-        gpc = new GpsPointContainer(droneLocation);
-        modeThread = new ModeThread(drone,move,bluetooth,speed,dMode,moveThreadDoString,gpc,getND, map, myPosition);
-        moveThread = new MoveThread(drone,move,speed);
+        // default GPS point - until the GPS will be calibration
+        // Home =>  32.167515,  35.085283
+        // KCG  =>  32.102935,  35.209722
+        droneLocation = new GpsPoint(32.167515,35.085283);
 
+        gpc = new GpsPointContainer(droneLocation);         // look in GpsPointContainer class for more info.
+
+        // set Threads
+        modeThread = new ModeThread(drone,move,bluetooth,indicatArray,dMode,moveThreadDoString,gpc,getND, map, myPosition);
+        moveThread = new MoveThread(drone,move,indicatArray);
+
+        // set ARDrone location on map
         myPosition.position(gpc.getDroneLocation().getLatLng());
 
+
+        // ask Naor <--------------------------------------------
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -437,7 +514,6 @@ public class BlueTerm extends Activity {
         });
 
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-
             @Override
             public void onMapLongClick(LatLng location) {
                 marksCount++;
@@ -470,7 +546,6 @@ public class BlueTerm extends Activity {
                 String index = m.getTitle().split(" ")[2];
                 //String[] indexArray = index.split(" ");
                 //index = indexArray[2];
-
                 //indexOfOldPosition = LatLngList.indexOf(m.getPosition());
                 indexOfOldPosition = Integer.parseInt(index) - 1;
             }
@@ -489,19 +564,16 @@ public class BlueTerm extends Activity {
             @Override
             public void onMarkerDrag(Marker m) {
                 // TODO Auto-generated method stub
-
             }
         });
 
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-
             @Override
             public void onInfoWindowClick(Marker marker) {
                 // Remove the marker
                 marker.remove();
                 gpc.remove(marker.getPosition());
                 marksCount--;
-
                 updateUI();
             }
         });
@@ -517,13 +589,14 @@ public class BlueTerm extends Activity {
                     .draggable(true)
                     .title(gpc.getLatLngList().get(i).toString() + " " + (i + 1))
                     .snippet("Tap here to remove this marker");
-
             map.addMarker(m);
         }
 
         rectOptions = new PolylineOptions().addAll(gpc.getLatLngList());
         rectOptions.color(Color.RED);
         polyline = map.addPolyline(rectOptions);
+
+        // ===============================================================================================================================
     }
 
 	@Override
