@@ -20,7 +20,8 @@ public class Function {
         Fly_Straight_And_Beware(3),
         Immediate_Danger(4),
         Manual_Flight(5),
-        Skip_Obstacle(6);
+        Wait_5_seconds(6),
+        Skip_Obstacle(7);
 
         private int code;
 
@@ -41,6 +42,13 @@ public class Function {
     }
 
     public static boolean isAllZero(float arr[], int size) {
+        for (int i = 0; i<size; i++) {
+            if (arr[i]!=0) return false;
+        }
+        return true;
+    }
+
+    public static boolean isAllZero(double arr[], int size) {
         for (int i = 0; i<size; i++) {
             if (arr[i]!=0) return false;
         }

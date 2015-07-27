@@ -24,6 +24,14 @@ public class ModeThread extends Thread {
     public GoogleMap map;
     public MarkerOptions myPosition;
 
+    double azimutDistance[];
+
+    private static long start = System.currentTimeMillis();
+    private static long end = start;
+
+    private static double GpsRadius = 10.0;
+    private static int rangeToFindAziAgain[] = {300,60};
+
 
     public ModeThread(ARDrone drone, float move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[], GpsPointContainer gpc, getNavData getND, GoogleMap map, MarkerOptions myPosition) {
         this.drone = drone;
@@ -39,30 +47,49 @@ public class ModeThread extends Thread {
         this.myPosition = myPosition;
     }
 
+    public void setMode(Function.droneMode newMode) {
+        prevMode = droneMode[0];
+        droneMode[0] = newMode;
+    }
+
     public void run() {
         while (true) {
+
             // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
             sensorArr = Function.CutBlueString(bluetooth[0]);
 
-            //System.out.println("arr = " + Arrays.toString(sensorArr));
+            azimutDistance = new double[]{0,0,0};
+            if (sensorArr[5] > 20 && sensorArr[5] < 50 && sensorArr[4] > 20 && sensorArr[4] < 50) {
+                LatLng point = new LatLng((double) sensorArr[4], (double) sensorArr[5]);
+                gpc.setDroneLocation(point);
+                myPosition.position(point);
+                if (gpc.isEmpty() == false) {
+                    azimutDistance = Cords.azmDist(gpc.getLocation(), gpc.getFirst());
+                    String distance = String.format("%.2f",azimutDistance[1]);
+                    gpc.setDroneGpsDataString("---> GPS distance data <---\nthe Distance to the next point is: " + distance +" Meters");
+                }
+                else gpc.resetDroneGpsDataString();
+            }
+
             if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
                 if (Function.isAllZero(move, 4) && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
                     whatThreadDo[0] = "-> HOVER <-" + "  Stay_And_Warn_Dynamic";
                 }
                 else if (Function.isAllZero(move, 4) == false && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
-                    prevMode = droneMode[0];
-                    droneMode[0] = Function.droneMode.Manual_Flight;
+                    setMode(Function.droneMode.Manual_Flight);
 
                 }
                 else if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
-                    prevMode = droneMode[0];
-                    droneMode[0] = Function.droneMode.Immediate_Danger;
+                    setMode(Function.droneMode.Immediate_Danger);
                 }
             }
 
             if (droneMode[0] == Function.droneMode.Find_Azimuth) {
                 whatThreadDo[0] = "-> YAW ->" + "  Find_Azimuth";
-                if (gpc.isEmpty()) droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
+                if (gpc.isEmpty()) {
+                    Function.fillMoveArray(move,0,0,0,0);
+                    droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
+                }
                 else {
                     LatLng temp = gpc.getFirst();
                     double azi = Cords.azmDist(gpc.getLocation(), temp)[0];
@@ -75,8 +102,7 @@ public class ModeThread extends Thread {
                     }
                     else {
                         Function.fillMoveArray(move, 0, 0, 0, 0);
-                        prevMode = droneMode[0];
-                        droneMode[0] = Function.droneMode.Fly_Straight_And_Beware;
+                        setMode(Function.droneMode.Fly_Straight_And_Beware);
                     }
                 }
             }
@@ -111,42 +137,45 @@ public class ModeThread extends Thread {
             if (droneMode[0] == Function.droneMode.Manual_Flight) {
                 whatThreadDo[0] = "Manual_Flight";
                 if (Function.isAllZero(move, 4)) {
-                    prevMode = droneMode[0];
-                    droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
+                    setMode(Function.droneMode.Stay_And_Warn_Dynamic);
                 }
             }
 
             if (droneMode[0] == Function.droneMode.Fly_Straight_And_Beware) {
                 whatThreadDo[0] = "Fly_Straight_And_Beware";
                 if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
-                    prevMode = droneMode[0];
-                    droneMode[0] = Function.droneMode.Immediate_Danger;
+                    setMode(Function.droneMode.Immediate_Danger);
                 }
                 else if (sensorArr[3] <= speed[2]) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
-                    droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic; // -------------------------------------------------
+                    setMode(Function.droneMode.Stay_And_Warn_Dynamic); // -------------------------------------------------
                     try {
                         drone.playLED(1,2,10);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+                else if (Function.isAllZero(azimutDistance,3)==false && azimutDistance[1] < GpsRadius) {
+                    gpc.removeFirst();
+                    start = System.currentTimeMillis();
+                    setMode(Function.droneMode.Wait_5_seconds);
+                }
+                else if (Function.isAllZero(azimutDistance,3)==false &&
+                        (azimutDistance[0]<rangeToFindAziAgain[0] || azimutDistance[0]>rangeToFindAziAgain[1])) {
+                    setMode(Function.droneMode.Find_Azimuth);
+                }
                 else {
                     Function.fillMoveArray(move, 0, -speed[0], 0, 0);
                 }
             }
 
-            if (sensorArr[5] > 20 && sensorArr[5] < 50 && sensorArr[4] > 20 && sensorArr[4] < 50) {
-                LatLng point = new LatLng((double) sensorArr[4], (double) sensorArr[5]);
-                gpc.setDroneLocation(point);
-                myPosition.position(point);
-                if (gpc.isEmpty() == false) {
-                    double tempData[] = Cords.azmDist(gpc.getLocation(), gpc.getFirst());
-                    String distance = String.format("%.2f",tempData[1]);
-                    gpc.setDroneGpsDataString("---> GPS distance data <---\nthe Distance to the next point is: " + distance +" Meters");
+            if (droneMode[0] == Function.droneMode.Wait_5_seconds) {
+                whatThreadDo[0] = "-> HOVER <-" + " Wait 5 seconds";
+                Function.fillMoveArray(move,0,0,0,0);
+                end = System.currentTimeMillis();
+                if (end - start > 5000) {
+                    setMode(Function.droneMode.Find_Azimuth);
                 }
-                else gpc.resetDroneGpsDataString();
-
             }
         }
     }
