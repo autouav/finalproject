@@ -42,9 +42,6 @@ import com.google.android.gms.maps.model.*;
 public class BlueTerm extends Activity {
 
     // ======================================================== Our Variables ========================================================
-    public static EmulatorView emulatorview;        // ask Naor <--------------------------------------------
-    public static int connect = 0;                  // As above
-
     protected static ARDrone drone;                 // on this object we operate all functions of flying and get NavData.
     protected static TextView navDataText;          // in this TextView We update the information that received from the Drone and the GPS.
     protected boolean takeOff = false;              // flag variable.
@@ -79,7 +76,7 @@ public class BlueTerm extends Activity {
         0 ->    (-) left        |       (+) right
         1 ->    (-) front       |       (+) back
         2 ->    (-) down        |       (+) up
-        3 ->    (-) yae-left    |       (+) yaw-right
+        3 ->    (-) yaw-left    |       (+) yaw-right
      */
     protected float move[] = new float[4];
     protected static String bluetooth[] = new String[1];                // An object that represents a stream from the Bluetooth
@@ -100,11 +97,15 @@ public class BlueTerm extends Activity {
     protected static GoogleMap map;                                     // map for the App
     protected static MarkerOptions myPosition;                          // represents the ARDrone on the map
 
-    protected PolylineOptions rectOptions;                              // ask Naor <--------------------------------------------
-    protected Polyline polyline;                                        // ask Naor <--------------------------------------------
-    protected static int marksCount = 0;                                // ask Naor <--------------------------------------------
+    // objects to create red line between two GPS points
+    protected PolylineOptions rectOptions;
+    protected Polyline polyline;
+    protected static int marksCount = 0;                                // need to count the marks of the track
 
     // ===============================================================================================================================
+
+    public static EmulatorView emulatorview;
+    public static int connect = 0;
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE = 1;
@@ -361,11 +362,11 @@ public class BlueTerm extends Activity {
     }
 
     /**
-     *      ask Naor <--------------------------------------------
+     * clean the map form check-points
+     * Activates the function that empty the GPS lists
      */
     public void clearMap(View v) {
         marksCount = 0;
-
         map.clear();
         gpc.emptyList();
         rectOptions = null;
@@ -427,10 +428,7 @@ public class BlueTerm extends Activity {
 			Log.e(LOG_TAG, "+++ DONE IN ON CREATE +++");
 
         // ================================================== Our setting -> onCreate ====================================================
-
-        // ask Naor <--------------------------------------------
         emulatorview = (EmulatorView) findViewById(R.id.emulatorView);
-        //emulatorview.setVisibility(View.GONE);
 
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -544,9 +542,6 @@ public class BlueTerm extends Activity {
             @Override
             public void onMarkerDragStart(Marker m) {
                 String index = m.getTitle().split(" ")[2];
-                //String[] indexArray = index.split(" ");
-                //index = indexArray[2];
-                //indexOfOldPosition = LatLngList.indexOf(m.getPosition());
                 indexOfOldPosition = Integer.parseInt(index) - 1;
             }
 
