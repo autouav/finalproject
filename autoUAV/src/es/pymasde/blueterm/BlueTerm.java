@@ -505,7 +505,8 @@ public class BlueTerm extends Activity {
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
-                //map.clear();
+                map.clear();
+                updateUI();
                 myPosition.rotation(getND.Yaw);
                 map.addMarker(myPosition);
             }
