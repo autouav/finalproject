@@ -92,7 +92,7 @@ public class BlueTerm extends Activity {
 
     protected Function.droneMode dMode[] = new Function.droneMode[1];   // An object that represents the mode of the ARDrone
 
-    protected GpsPoint droneLocation;                                   // via GPS that connected to Teensy
+    protected LatLng droneLocation;                                   // via GPS that connected to Teensy
     protected static GpsPointContainer gpc;                             // this object save all check-point and the drone location
     protected static GoogleMap map;                                     // map for the App
     protected static MarkerOptions myPosition;                          // represents the ARDrone on the map
@@ -489,7 +489,7 @@ public class BlueTerm extends Activity {
         // default GPS point - until the GPS will be calibration
         // Home =>  32.167515,  35.085283
         // KCG  =>  32.102935,  35.209722
-        droneLocation = new GpsPoint(32.167515,35.085283);
+        droneLocation = new LatLng(32.167515,35.085283);
 
         gpc = new GpsPointContainer(droneLocation);         // look in GpsPointContainer class for more info.
 
@@ -498,7 +498,7 @@ public class BlueTerm extends Activity {
         moveThread = new MoveThread(drone,move,indicatArray);
 
         // set ARDrone location on map
-        myPosition.position(gpc.getDroneLocation().getLatLng());
+        myPosition.position(gpc.getDroneLocation());
 
 
         // ask Naor <--------------------------------------------
@@ -524,7 +524,7 @@ public class BlueTerm extends Activity {
 
                 map.addMarker(m);
 
-                gpc.add(new GpsPoint(location));
+                gpc.add(location);
 
                 if (gpc.getListPointSize() == 1)
                     rectOptions = new PolylineOptions().add(location);

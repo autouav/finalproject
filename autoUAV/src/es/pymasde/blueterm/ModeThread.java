@@ -64,7 +64,7 @@ public class ModeThread extends Thread {
                 whatThreadDo[0] = "-> YAW ->" + "  Find_Azimuth";
                 if (gpc.isEmpty()) droneMode[0] = Function.droneMode.Stay_And_Warn_Dynamic;
                 else {
-                    GpsPoint temp = gpc.getFirst();
+                    LatLng temp = gpc.getFirst();
                     double azi = Cords.azmDist(gpc.getLocation(), temp)[0];
                     double aziFix = getND.Yaw - azi;
                     if (aziFix < 0) aziFix += 360;

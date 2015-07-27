@@ -1,7 +1,7 @@
 package es.pymasde.blueterm;
 
 
-
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * this class represents a simple coordinate conversion into AR 2D screen,
@@ -33,13 +33,13 @@ public class Cords {
 	 * @param ll2
 	 * @return
 	 */
-	public static double[] flatWorldDist(GpsPoint ll1, GpsPoint ll2) {
+	public static double[] flatWorldDist(LatLng ll1, LatLng ll2) {
 		double[] ans = new double[3];
-		double dx = ll2.getLon()-ll1.getLon(); // delta lon east
-		double dy = ll2.getLat()-ll1.getLat(); // delta lat north
-		double dz = ll2.getAlt()-ll1.getAlt(); // delta al`tr
+		double dx = ll2.longitude-ll1.longitude; // delta lon east
+		double dy = ll2.latitude-ll1.latitude; // delta lat north
+		double dz = 0; // delta al`tr
 		if(Math.abs(dx)>0.3 | Math.abs(dy)>0.3) {return null;}
-		double x = EARTH_RADIUS * Math.toRadians(dx) * Math.cos(Math.toRadians(ll1.getLon()));
+		double x = EARTH_RADIUS * Math.toRadians(dx) * Math.cos(Math.toRadians(ll1.longitude));
 		double y = EARTH_RADIUS * Math.toRadians(dy);
 		ans[0] = x; ans[1]=y; ans[2] = dz;
 		return ans;
@@ -55,7 +55,7 @@ public class Cords {
 	 * @param ll2 second GPS cords
 	 * @return [azm,dist,dz];
 	 */
-	public static double[] azmDist(GpsPoint ll1, GpsPoint ll2){
+	public static double[] azmDist(LatLng ll1, LatLng ll2){
 		double[] ans = new double[3];
 		double[] vec = flatWorldDist(ll1,ll2);
 		double dist = Math.sqrt(vec[0]*vec[0]+vec[1]*vec[1]); // 2D for now
@@ -74,20 +74,20 @@ public class Cords {
 	 * @param vec
 	 * @return
 	 */
-	public static GpsPoint offsetLatLonAlt(GpsPoint ll1, double[] vec) {
+	public static LatLng offsetLatLonAlt(LatLng ll1, double[] vec) {
 		double[] ans = new double[3];
 		double dz = vec[2]; // delta alt
 		if(Math.abs(vec[0])>100000 | Math.abs(vec[1])>100000) {
 			//throw new RuntimeException ("ERR: the offset vectr os too big (more than 100km) - can not be assumed as flat world");
 			return null;
 		}
-		double lon = vec[0]/(EARTH_RADIUS * Math.cos(Math.toRadians(ll1.getLon())));
+		double lon = vec[0]/(EARTH_RADIUS * Math.cos(Math.toRadians(ll1.longitude)));
 		double lat = vec[1]/EARTH_RADIUS;
-		GpsPoint gp = new GpsPoint(ll1.getLon()+Math.toDegrees(lon),ll1.getLat()+Math.toDegrees(lat),ll1.getAlt()+dz);
+		LatLng gp = new LatLng(ll1.longitude+Math.toDegrees(lon),ll1.latitude+Math.toDegrees(lat));
 		return gp;
 	}
 
-	public static GpsPoint offsetLatLonAzmDist(GpsPoint ll1, double azm, double dist) {
+	public static LatLng offsetLatLonAzmDist(LatLng ll1, double azm, double dist) {
 		double[] vec = azmDist2cords(azm,dist);
 		return offsetLatLonAlt(ll1,vec);
 	}
@@ -148,8 +148,8 @@ public class Cords {
 	public static void main(String[] arg) {
 
 		double ans[] = new double[3];
-		GpsPoint p1 = new GpsPoint(32.10283, 35.209687, 680);
-		GpsPoint p2 = new GpsPoint(32.10368, 35.20954, 685);
+		LatLng p1 = new LatLng(32.10283, 35.209687);
+		LatLng p2 = new LatLng(32.10368, 35.20954);
 		ans = azmDist(p1,p2);
 		//ans = flatWorldDist(p1,p2);
 

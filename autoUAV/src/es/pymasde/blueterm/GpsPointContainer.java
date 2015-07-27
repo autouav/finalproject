@@ -1,69 +1,55 @@
 package es.pymasde.blueterm;
 
-/**
- * Created by zohar on 12/07/2015.
- */
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.LinkedList;
 
 public class GpsPointContainer {
 
-    private GpsPoint droneLocation;
+    private LatLng droneLocation;
     private String droneGpsDataString;
-    private LinkedList<GpsPoint> listPoint;
-    private LinkedList<LatLng> latLngList;
+    private LinkedList<LatLng> listPoint;
 
-    public GpsPointContainer(GpsPoint droneLocation) {
+    public GpsPointContainer(LatLng droneLocation) {
         this.droneLocation = droneLocation;
         droneGpsDataString = "---> None GPS distance data <---\n";
-        listPoint = new LinkedList<GpsPoint>();
-        latLngList = new LinkedList<LatLng>();
-        /*
-         ------------------------------------------just for test
-          */
-        //GpsPoint gp = new GpsPoint(32.167524, 35.086128);//(32.1675153, 35.0852831);
-        //listPoint.add(gp);
+        listPoint = new LinkedList<LatLng>();
     }
 
-    public void add(GpsPoint gp) {
-        listPoint.add(gp);
-        latLngList.add(gp.getLatLng());
+    public void add(LatLng ll) {
+        listPoint.add(ll);
     }
 
     public boolean isEmpty() {return listPoint.isEmpty();}
 
     public void addFootBallList() {
-        GpsPoint gp1 = new GpsPoint(32.105368, 35.208137);
-        GpsPoint gp2 = new GpsPoint(32.105648, 35.208568);
+        LatLng gp1 = new LatLng(32.105368, 35.208137);
+        LatLng gp2 = new LatLng(32.105648, 35.208568);
         listPoint.clear();
         listPoint.add(gp1);
         listPoint.add(gp2);
     }
 
-    public GpsPoint removeFirst() {
-        GpsPoint gp = listPoint.removeFirst();
-        latLngList.removeFirst();
-        return gp;
+    public LatLng removeFirst() {
+        LatLng ll = listPoint.removeFirst();
+        return ll;
     }
 
-    public GpsPoint getFirst() {
-        GpsPoint gp = listPoint.getFirst();
-        return gp;
+    public LatLng getFirst() {
+        LatLng ll = listPoint.getFirst();
+        return ll;
     }
 
     public void remove(LatLng location) {
         for (int i = 0; i < getListPointSize(); i++) {
-            if (listPoint.get(i).getLat() == location.latitude && listPoint.get(i).getLon() == location.longitude) {
+            if (listPoint.get(i).latitude == location.latitude && listPoint.get(i).longitude == location.longitude) {
                 listPoint.remove(i);
-                latLngList.remove(i);
                 break;
             }
         }
     }
 
-    public GpsPoint getLocation() {
+    public LatLng getLocation() {
         return droneLocation;
     }
 
@@ -71,8 +57,8 @@ public class GpsPointContainer {
         String str = "";
         if (listPoint.size()==0) return "the ListPoint is empty";
         for (int i=0; i<listPoint.size(); i++) {
-            GpsPoint gp = listPoint.get(i);
-            if (i+1 == listPoint.size()) str = str + gp;
+            LatLng gp = listPoint.get(i);
+            if (listPoint.size() == i+1) str = str + gp;
             else str = str + gp +"\n";
         }
         return str;
@@ -82,18 +68,17 @@ public class GpsPointContainer {
 
     public void emptyList() {
         listPoint.clear();
-        latLngList.clear();
     }
 
     public LinkedList<LatLng> getLatLngList() {
-        return latLngList;
+        return listPoint;
     }
 
     public void setDroneLocation(LatLng point) {
-        droneLocation = new GpsPoint(point.latitude,point.longitude);
+        droneLocation = new LatLng(point.latitude,point.longitude);
     }
 
-    public GpsPoint getDroneLocation() {
+    public LatLng getDroneLocation() {
         return droneLocation;
     }
 
