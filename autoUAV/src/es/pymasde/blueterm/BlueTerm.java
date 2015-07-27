@@ -501,7 +501,7 @@ public class BlueTerm extends Activity {
         myPosition.position(gpc.getDroneLocation());
 
 
-        // ask Naor <--------------------------------------------
+        // update drone location UI when the phone detects a change in his location
         map.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -511,24 +511,32 @@ public class BlueTerm extends Activity {
             }
         });
 
+        // Add new Marker when you press and hold (longClick)
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng location) {
                 marksCount++;
 
+                // Generate the Marker
                 MarkerOptions m = new MarkerOptions();
                 m.position(location)
                         .draggable(true)
                         .title(location.toString() + " " + marksCount)
                         .snippet("Tap here to remove this marker");
 
+                // Add the marker to the map and to the GpsPointContainer
                 map.addMarker(m);
+<<<<<<< HEAD
 
                 gpc.add(location);
+=======
+                gpc.add(new GpsPoint(location));
+>>>>>>> 18d185ad1ae3709fdec2d06e0fc31e3cda2c4c89
 
+                // if the size of GpsPointContainer equal to 1 we create new PolylineOptions
                 if (gpc.getListPointSize() == 1)
                     rectOptions = new PolylineOptions().add(location);
-                else {
+                else { // else we add the new location to PolylineOptions
                     rectOptions.add(location);
                     rectOptions.color(Color.RED);
                     polyline = map.addPolyline(rectOptions);
@@ -539,12 +547,14 @@ public class BlueTerm extends Activity {
         map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             int indexOfOldPosition = 0;
 
+            // When you begin to drag maintain index point
             @Override
             public void onMarkerDragStart(Marker m) {
                 String index = m.getTitle().split(" ")[2];
                 indexOfOldPosition = Integer.parseInt(index) - 1;
             }
 
+            // When we finished dragging we will update the new location in GpsPointContainer
             @Override
             public void onMarkerDragEnd(Marker m) {
                 m.setTitle(m.getPosition().toString() + " " + indexOfOldPosition);
@@ -562,6 +572,7 @@ public class BlueTerm extends Activity {
             }
         });
 
+        // Remove the Marker from the UI and from the GpsPointContainer object
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
