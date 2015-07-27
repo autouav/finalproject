@@ -526,12 +526,7 @@ public class BlueTerm extends Activity {
 
                 // Add the marker to the map and to the GpsPointContainer
                 map.addMarker(m);
-<<<<<<< HEAD
-
                 gpc.add(location);
-=======
-                gpc.add(new GpsPoint(location));
->>>>>>> 18d185ad1ae3709fdec2d06e0fc31e3cda2c4c89
 
                 // if the size of GpsPointContainer equal to 1 we create new PolylineOptions
                 if (gpc.getListPointSize() == 1)
