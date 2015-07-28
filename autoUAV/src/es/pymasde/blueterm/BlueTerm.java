@@ -39,7 +39,7 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.*;
 
 
-public class BlueTerm extends Activity {
+public class BlueTerm extends Activity implements AdapterView.OnItemSelectedListener {
 
     // ======================================================== Our Variables ========================================================
     protected static ARDrone drone;                 // on this object we operate all functions of flying and get NavData.
@@ -96,6 +96,7 @@ public class BlueTerm extends Activity {
     protected static GpsPointContainer gpc;                             // this object save all check-point and the drone location
     protected static GoogleMap map;                                     // map for the App
     protected static MarkerOptions myPosition;                          // represents the ARDrone on the map
+    private Spinner mapTypeSpinner;
 
     // objects to create red line between two GPS points
     protected PolylineOptions rectOptions;
@@ -373,6 +374,12 @@ public class BlueTerm extends Activity {
         polyline = null;
     }
 
+    public void addListenerOnSpinnerItemSelection() {
+        mapTypeSpinner = (Spinner) findViewById(R.id.map_type_spinner);
+        mapTypeSpinner.setOnItemSelectedListener(this);
+        mapTypeSpinner.setSelection(4);
+    }
+
     // ===============================================================================================================================
 
 	/** Called when the activity is first created. */
@@ -433,6 +440,7 @@ public class BlueTerm extends Activity {
         map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         map.setMyLocationEnabled(true);
+        addListenerOnSpinnerItemSelection();
 
         myPosition = new MarkerOptions();                                                   // create marker that represents the ARDrone.
         myPosition.icon(BitmapDescriptorFactory.fromResource(R.drawable.ardrone_new));      // Changing marker icon
@@ -1053,7 +1061,7 @@ public class BlueTerm extends Activity {
             	}
             return true;
         case R.id.preferences:
-        	doPreferences();
+            doPreferences();
             return true;
         case R.id.menu_special_keys:
             doDocumentKeys();
@@ -1137,6 +1145,32 @@ public class BlueTerm extends Activity {
 		});		
 		
 		mAboutDialog.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (i) {
+            case 0:
+                map.setMapType(0);
+                break;
+            case 1:
+                map.setMapType(1);
+                break;
+            case 2:
+                map.setMapType(2);
+                break;
+            case 3:
+                map.setMapType(3);
+                break;
+            case 4:
+                map.setMapType(4);
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
 

@@ -247,16 +247,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
+        <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/map_type_spinner"
+                android:spinnerMode="dialog"
+                android:entries="@array/map_type_arrays"
+                android:prompt="@string/map_type_prompt"
+                android:layout_marginLeft="45dp"
+                android:layout_marginTop="10dp"/>
+
         <Button
                 android:id="@+id/clearMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="45dp"
-                android:layout_marginTop="10dp"
                 android:onClick="clearMap"
-                android:text="Clear Map" />
-
+                android:text="Clear Map"
+                android:layout_alignParentBottom="true" android:layout_alignParentLeft="true"/>
     </RelativeLayout>
 </LinearLayout>

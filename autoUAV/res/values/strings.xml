@@ -87,6 +87,16 @@
     
     <string name="pymasde_es">http://pymasde.es/</string>
 
+    <string name="map_type_prompt">Choose a country</string>
+
+    <string-array name="map_type_arrays">
+        <item>MAP_TYPE_NONE</item>
+        <item>MAP_TYPE_NORMAL</item>
+        <item>MAP_TYPE_SATELLITE</item>
+        <item>MAP_TYPE_TERRAIN</item>
+        <item>MAP_TYPE_HYBRID</item>
+    </string-array>
+
    <!-- Don't localize these default values -->
    <string name="default_value_localecho_preference">false</string>
    <string name="default_value_allowinsecureconnections_preference">true</string>
