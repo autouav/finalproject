@@ -5,7 +5,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ModeThread extends Thread {
 
@@ -32,6 +36,12 @@ public class ModeThread extends Thread {
     private static double GpsRadius = 10.0;
     private static int rangeToFindAziAgain[] = {300,60};
 
+    // Log variables
+    final DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+    Long currentTime = System.currentTimeMillis();
+    Long prevTime = currentTime;
+    Date resultdate = new Date(currentTime);
+    String logName = resultdate.toString();
 
     public ModeThread(ARDrone drone, float move[], String bluetooth[], float speed[], Function.droneMode droneMode[], String whatThreadDo[], GpsPointContainer gpc, getNavData getND, GoogleMap map, MarkerOptions myPosition) {
         this.drone = drone;
@@ -58,10 +68,18 @@ public class ModeThread extends Thread {
             // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
             sensorArr = Function.CutBlueString(bluetooth[0]);
 
-            Function.appendLog("Drone mode: " + whatThreadDo[0]
-                    + "; Prev mode: " + prevMode.name()
-                    //+ "; GPS Data: " + gpc.getLocation()
-                    + "; Sensor Arr: " + Arrays.toString(sensorArr));
+            if (currentTime - prevTime > 500) {
+                Function.appendLog(dateFormat.format(resultdate)
+                        + ";\tDrone mode: " + whatThreadDo[0]
+                        + ";\tPrev mode: " + prevMode.name()
+                        //+ ";\tGPS Data: " + gpc.getLocation()
+                        + ";\tSensor Arr: " + Arrays.toString(sensorArr), logName);
+
+                prevTime = currentTime;
+            }
+
+            currentTime = System.currentTimeMillis();
+            resultdate.setTime(currentTime);
 
             azimutDistance = new double[]{0,0,0};
             if (sensorArr[5] > 20 && sensorArr[5] < 50 && sensorArr[4] > 20 && sensorArr[4] < 50) {
