@@ -58,6 +58,10 @@ public class ModeThread extends Thread {
             // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
             sensorArr = Function.CutBlueString(bluetooth[0]);
 
+            Function.appendLog("STATE: " + whatThreadDo[0]
+                    + "; GPS Data: " + gpc.getLocation()
+                    + "; Sensor Arr: " + Arrays.toString(sensorArr));
+
             azimutDistance = new double[]{0,0,0};
             if (sensorArr[5] > 20 && sensorArr[5] < 50 && sensorArr[4] > 20 && sensorArr[4] < 50) {
                 LatLng point = new LatLng((double) sensorArr[4], (double) sensorArr[5]);

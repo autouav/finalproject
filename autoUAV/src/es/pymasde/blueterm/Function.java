@@ -1,5 +1,9 @@
 package es.pymasde.blueterm;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class Function {
@@ -32,6 +36,7 @@ public class Function {
         public int getVal() {
             return code;
         }
+        
     }
 
     public static void fillMoveArray(float arr[], float a0, float a1, float a2, float a3) {
@@ -78,5 +83,27 @@ public class Function {
             index++;
         }
         return arr;
+    }
+
+    public static void appendLog(String text) {
+        File logFile = new File("sdcard/Download/log.file");
+        if (!logFile.exists()) {
+            try {
+                logFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            //BufferedWriter for performance, true to set append to file flag
+            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
+            buf.append(text);
+            buf.newLine();
+            buf.flush();
+            buf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
