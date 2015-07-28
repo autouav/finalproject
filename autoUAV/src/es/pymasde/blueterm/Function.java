@@ -36,7 +36,7 @@ public class Function {
         public int getVal() {
             return code;
         }
-        
+
     }
 
     public static void fillMoveArray(float arr[], float a0, float a1, float a2, float a3) {
@@ -85,8 +85,8 @@ public class Function {
         return arr;
     }
 
-    public static void appendLog(String text) {
-        File logFile = new File("sdcard/Download/log.file");
+    public static void appendLog(String text, String fileName) {
+        File logFile = new File("sdcard/Download/log.file." + fileName);
         if (!logFile.exists()) {
             try {
                 logFile.createNewFile();
