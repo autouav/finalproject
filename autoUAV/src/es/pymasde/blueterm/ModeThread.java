@@ -58,8 +58,9 @@ public class ModeThread extends Thread {
             // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
             sensorArr = Function.CutBlueString(bluetooth[0]);
 
-            Function.appendLog("STATE: " + whatThreadDo[0]
-                    + "; GPS Data: " + gpc.getLocation()
+            Function.appendLog("Drone mode: " + whatThreadDo[0]
+                    + "; Prev mode: " + prevMode.name()
+                    //+ "; GPS Data: " + gpc.getLocation()
                     + "; Sensor Arr: " + Arrays.toString(sensorArr));
 
             azimutDistance = new double[]{0,0,0};

@@ -36,7 +36,7 @@ public class Function {
         public int getVal() {
             return code;
         }
-        
+
     }
 
     public static void fillMoveArray(float arr[], float a0, float a1, float a2, float a3) {
