@@ -8,11 +8,11 @@ public class getNavData {
     ARDrone drone;
     String str[];
     NavDataListener ndl;
-    public float Battery;
-    public float Yaw;
-    public float Roll;
-    public float Pitch;
-    public float Altitude;
+    private float Battery;
+    private float Yaw;
+    private float Roll;
+    private float Pitch;
+    private float Altitude;
 
 
     public getNavData(ARDrone drone, String str[]) {
@@ -38,5 +38,9 @@ public class getNavData {
             }
         };
         drone.addNavDataListener(ndl);
+    }
+
+    public float getYaw() {
+        return Yaw;
     }
 }

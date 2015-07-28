@@ -428,7 +428,6 @@ public class BlueTerm extends Activity implements AdapterView.OnItemSelectedList
         mEmulatorView.setFocusableInTouchMode(true);
         mEmulatorView.requestFocus();
         mEmulatorView.register(mKeyListener);
-
         mSerialService = new BluetoothSerialService(this, mHandlerBT, mEmulatorView);
         
 		if (DEBUG)
@@ -515,7 +514,9 @@ public class BlueTerm extends Activity implements AdapterView.OnItemSelectedList
             public void onMyLocationChange(Location location) {
                 map.clear();
                 updateUI();
-                myPosition.rotation(getND.Yaw);
+                float yaw = getND.getYaw();
+                if (yaw < 0) yaw = yaw + 360;
+                myPosition.rotation(yaw);
                 map.addMarker(myPosition);
             }
         });

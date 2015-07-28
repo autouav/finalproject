@@ -116,8 +116,13 @@ public class ModeThread extends Thread {
                 else {
                     LatLng temp = gpc.getFirst();
                     double azi = Cords.azmDist(gpc.getLocation(), temp)[0];
-                    double aziFix = getND.Yaw - azi;
+                    double aziFix = getND.getYaw() - azi;
                     if (aziFix < 0) aziFix += 360;
+
+                    // need to check it..
+                    if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                        setMode(Function.droneMode.Immediate_Danger);
+                    }
 
                     if (aziFix < 350 && aziFix > 10) {
                         if (aziFix>180 && aziFix<360) Function.fillMoveArray(move, 0,0,0,speed[0]);
@@ -153,7 +158,7 @@ public class ModeThread extends Thread {
                 }
                 else if (sensorArr[0] <= speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] <= speed[3]) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
-                    droneMode[0] = prevMode; // -------------------------------------------------
+                    droneMode[0] = prevMode;
                 }
             }
 
@@ -171,9 +176,9 @@ public class ModeThread extends Thread {
                 }
                 else if (sensorArr[3] <= speed[2]) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
-                    setMode(Function.droneMode.Stay_And_Warn_Dynamic); // -------------------------------------------------
+                    setMode(Function.droneMode.Skip_Obstacle);
                     try {
-                        drone.playLED(1,2,10);
+                        drone.playLED(1,5,1);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -196,8 +201,29 @@ public class ModeThread extends Thread {
                 whatThreadDo[0] = "-> HOVER <-" + " Wait 5 seconds";
                 Function.fillMoveArray(move,0,0,0,0);
                 end = System.currentTimeMillis();
+
+                // need to check it...
+                if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                    setMode(Function.droneMode.Immediate_Danger);
+                }
+
                 if (end - start > 5000) {
                     setMode(Function.droneMode.Find_Azimuth);
+                }
+            }
+
+            if (droneMode[0] == Function.droneMode.Skip_Obstacle) {
+                whatThreadDo[0] = "Skip_Obstacle";
+                // need to check it...
+                if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                    setMode(Function.droneMode.Immediate_Danger);
+                }
+                else if (sensorArr[3] <= speed[2]) {
+                    Function.fillMoveArray(move,speed[0],0,0,0);
+                }
+                else {
+                    Function.fillMoveArray(move, 0, 0, 0, 0);
+                    setMode(Function.droneMode.Fly_Straight_And_Beware);
                 }
             }
         }
