@@ -285,7 +285,34 @@ void sensors_loop() {
  Serial1.print(lngLocation,6);
  Serial.print(lngLocation,6);
  
- float headingDegrees = heading * 180/M_PI;
+ Vector norm = compass.readNormalize();
+
+  // Calculate heading
+  float heading = atan2(norm.YAxis, norm.XAxis);
+
+  // Set declination angle on your location and fix heading
+  // You can find your declination on: http://magnetic-declination.com/
+  // (+) Positive or (-) for negative
+  // For Bytom / Poland declination angle is 4'26E (positive)
+  // Formula: (deg + (min / 60.0)) / (180 / M_PI);
+  float declinationAngle = (4.0 + (26.0 / 60.0)) / (180 / M_PI);
+  heading += declinationAngle;
+
+  // Correct for heading < 0deg and heading > 360deg
+  if (heading < 0)
+  {
+    heading += 2 * PI;
+  }
+
+  if (heading > 2 * PI)
+  {
+    heading -= 2 * PI;
+  }
+
+  // Convert to degrees
+ float headingDegrees = heading * 180/M_PI; 
+ Serial.print(",\t");
+ Serial1.print(",");
  Serial1.print(headingDegrees);
  Serial.print(headingDegrees);
  Serial1.println();
