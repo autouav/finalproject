@@ -16,7 +16,7 @@ public class Function {
         4 -> GPS Lon
         5 -> GPS Lat
      */
-    public static final int sizeOfArray = 6;
+    public static final int sizeOfArray = 7;
 
     public static enum droneMode {
         Stay_And_Warn_Dynamic(1),

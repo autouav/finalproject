@@ -514,6 +514,8 @@ public class BlueTerm extends Activity implements AdapterView.OnItemSelectedList
             public void onMyLocationChange(Location location) {
                 map.clear();
                 updateUI();
+                // We need to change the sensorArray variable to be static and to pass him to ModeThread
+                // but before we need to initialize him to be {0, 0, 0, 0, 0, 0}
                 float yaw = getND.getYaw();
                 if (yaw < 0) yaw = yaw + 360;
                 myPosition.rotation(yaw);

@@ -65,7 +65,7 @@ public class ModeThread extends Thread {
     public void run() {
         while (true) {
 
-            // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat
+            // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat, 6->Yaw from compass
             sensorArr = Function.CutBlueString(bluetooth[0]);
 
             if (currentTime - prevTime > 500) {
@@ -116,7 +116,7 @@ public class ModeThread extends Thread {
                 else {
                     LatLng temp = gpc.getFirst();
                     double azi = Cords.azmDist(gpc.getLocation(), temp)[0];
-                    double aziFix = getND.getYaw() - azi;
+                    double aziFix = sensorArr[6] - azi;
                     if (aziFix < 0) aziFix += 360;
 
                     // need to check it..
