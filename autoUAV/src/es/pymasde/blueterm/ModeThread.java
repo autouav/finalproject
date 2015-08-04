@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 public class ModeThread extends Thread {
@@ -21,7 +20,7 @@ public class ModeThread extends Thread {
     float speed[];
     Function.droneMode droneMode[];
     String whatThreadDo[];
-    float sensorArr[];
+    static float bluetoothData[];
     GpsPointContainer gpc;
     getNavData getND;
 
@@ -66,14 +65,14 @@ public class ModeThread extends Thread {
         while (true) {
 
             // 0->left, 1->front, 2->right, 3->MaxSensor, 4,5->GPS_Lon_Lat, 6->Yaw from compass
-            sensorArr = Function.CutBlueString(bluetooth[0]);
+            bluetoothData = Function.CutBlueString(bluetooth[0]);
 
             if (currentTime - prevTime > 500) {
                 Function.appendLog(dateFormat.format(resultdate)
                         + ";\tDrone mode: " + whatThreadDo[0]
                         + ";\tPrev mode: " + prevMode.name()
                         //+ ";\tGPS Data: " + gpc.getLocation()
-                        + ";\tSensor Arr: " + Arrays.toString(sensorArr), logName);
+                        + ";\tSensor Arr: " + Arrays.toString(bluetoothData), logName);
 
                 prevTime = currentTime;
             }
@@ -82,8 +81,8 @@ public class ModeThread extends Thread {
             resultdate.setTime(currentTime);
 
             azimutDistance = new double[]{0,0,0};
-            if (sensorArr[5] > 20 && sensorArr[5] < 50 && sensorArr[4] > 20 && sensorArr[4] < 50) {
-                LatLng point = new LatLng((double) sensorArr[4], (double) sensorArr[5]);
+            if (bluetoothData[5] > 20 && bluetoothData[5] < 50 && bluetoothData[4] > 20 && bluetoothData[4] < 50) {
+                LatLng point = new LatLng((double) bluetoothData[4], (double) bluetoothData[5]);
                 gpc.setDroneLocation(point);
                 myPosition.position(point);
                 if (gpc.isEmpty() == false) {
@@ -95,14 +94,14 @@ public class ModeThread extends Thread {
             }
 
             if (droneMode[0] == Function.droneMode.Stay_And_Warn_Dynamic) {
-                if (Function.isAllZero(move, 4) && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
+                if (Function.isAllZero(move, 4) && Function.isAllLowerNum(bluetoothData, 3, speed[3])) {
                     whatThreadDo[0] = "-> HOVER <-" + "  Stay_And_Warn_Dynamic";
                 }
-                else if (Function.isAllZero(move, 4) == false && Function.isAllLowerNum(sensorArr, 3, speed[3])) {
+                else if (Function.isAllZero(move, 4) == false && Function.isAllLowerNum(bluetoothData, 3, speed[3])) {
                     setMode(Function.droneMode.Manual_Flight);
 
                 }
-                else if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                else if (Function.isAllLowerNum(bluetoothData, 3, speed[3]) == false) {
                     setMode(Function.droneMode.Immediate_Danger);
                 }
             }
@@ -116,11 +115,11 @@ public class ModeThread extends Thread {
                 else {
                     LatLng temp = gpc.getFirst();
                     double azi = Cords.azmDist(gpc.getLocation(), temp)[0];
-                    double aziFix = sensorArr[6] - azi;
+                    double aziFix = bluetoothData[6] - azi;
                     if (aziFix < 0) aziFix += 360;
 
                     // need to check it..
-                    if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                    if (Function.isAllLowerNum(bluetoothData, 3, speed[3]) == false) {
                         setMode(Function.droneMode.Immediate_Danger);
                     }
 
@@ -137,26 +136,26 @@ public class ModeThread extends Thread {
 
             if (droneMode[0] == Function.droneMode.Immediate_Danger) {
                 // 0 ---  <= speed[3]  1 --- > speed[3]
-                if (sensorArr[0] <= speed[3] && sensorArr[1] > speed[3] && sensorArr[2] <= speed[3]) { // Front Obstacle -> Go Back
+                if (bluetoothData[0] <= speed[3] && bluetoothData[1] > speed[3] && bluetoothData[2] <= speed[3]) { // Front Obstacle -> Go Back
                     Function.fillMoveArray(move,0,speed[0],0,0);
                     whatThreadDo[0] = "-> GO BACK ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] > speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] <= speed[3]) { // Left Obstacle -> Go Right
+                } else if (bluetoothData[0] > speed[3] && bluetoothData[1] <= speed[3] && bluetoothData[2] <= speed[3]) { // Left Obstacle -> Go Right
                     Function.fillMoveArray(move,speed[0],0,0,0);
                     whatThreadDo[0] = "-> GO RIGHT ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] <= speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] > speed[3]) { // Right Obstacle -> Go Left
+                } else if (bluetoothData[0] <= speed[3] && bluetoothData[1] <= speed[3] && bluetoothData[2] > speed[3]) { // Right Obstacle -> Go Left
                     Function.fillMoveArray(move,-speed[0],0,0,0);
                     whatThreadDo[0] = "-> GO LEFT ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] > speed[3] && sensorArr[1] > speed[3] && sensorArr[2] <= speed[3]) { // Left-Front Obstacle -> Go Right-Back
+                } else if (bluetoothData[0] > speed[3] && bluetoothData[1] > speed[3] && bluetoothData[2] <= speed[3]) { // Left-Front Obstacle -> Go Right-Back
                     Function.fillMoveArray(move,speed[0],speed[0],0,0);
                     whatThreadDo[0] = "-> GO RIGHT-BACK ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] <= speed[3] && sensorArr[1] > speed[3] && sensorArr[2] > speed[3]) { // Right-Front Obstacle -> Go Left-Back
+                } else if (bluetoothData[0] <= speed[3] && bluetoothData[1] > speed[3] && bluetoothData[2] > speed[3]) { // Right-Front Obstacle -> Go Left-Back
                     Function.fillMoveArray(move,-speed[0],speed[0],0,0);
                     whatThreadDo[0] = "-> GO LEFT-BACK ->" + "  Immediate_Danger";
-                } else if (sensorArr[0] > speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] > speed[3]) { // Right-Left Obstacle -> Go Straight
+                } else if (bluetoothData[0] > speed[3] && bluetoothData[1] <= speed[3] && bluetoothData[2] > speed[3]) { // Right-Left Obstacle -> Go Straight
                     Function.fillMoveArray(move, 0, -speed[0], 0, 0);
                     whatThreadDo[0] = "-> GO STRAIGHT ->" + "  Immediate_Danger";
                 }
-                else if (sensorArr[0] <= speed[3] && sensorArr[1] <= speed[3] && sensorArr[2] <= speed[3]) {
+                else if (bluetoothData[0] <= speed[3] && bluetoothData[1] <= speed[3] && bluetoothData[2] <= speed[3]) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
                     droneMode[0] = prevMode;
                 }
@@ -171,10 +170,10 @@ public class ModeThread extends Thread {
 
             if (droneMode[0] == Function.droneMode.Fly_Straight_And_Beware) {
                 whatThreadDo[0] = "Fly_Straight_And_Beware";
-                if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                if (Function.isAllLowerNum(bluetoothData, 3, speed[3]) == false) {
                     setMode(Function.droneMode.Immediate_Danger);
                 }
-                else if (sensorArr[3] <= speed[2]) {
+                else if (bluetoothData[3] <= speed[2]) {
                     Function.fillMoveArray(move, 0, 0, 0, 0);
                     setMode(Function.droneMode.Skip_Obstacle);
                     try {
@@ -203,7 +202,7 @@ public class ModeThread extends Thread {
                 end = System.currentTimeMillis();
 
                 // need to check it...
-                if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                if (Function.isAllLowerNum(bluetoothData, 3, speed[3]) == false) {
                     setMode(Function.droneMode.Immediate_Danger);
                 }
 
@@ -215,10 +214,10 @@ public class ModeThread extends Thread {
             if (droneMode[0] == Function.droneMode.Skip_Obstacle) {
                 whatThreadDo[0] = "Skip_Obstacle";
                 // need to check it...
-                if (Function.isAllLowerNum(sensorArr, 3, speed[3]) == false) {
+                if (Function.isAllLowerNum(bluetoothData, 3, speed[3]) == false) {
                     setMode(Function.droneMode.Immediate_Danger);
                 }
-                else if (sensorArr[3] <= speed[2]) {
+                else if (bluetoothData[3] <= speed[2]) {
                     Function.fillMoveArray(move,speed[0],0,0,0);
                 }
                 else {
