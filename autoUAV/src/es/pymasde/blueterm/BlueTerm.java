@@ -88,7 +88,7 @@ public class BlueTerm extends Activity implements AdapterView.OnItemSelectedList
         2 ->    IR maximum value - to set the drone mode in "Immediately Danger"
         3 ->    Sonar maximum value - to identify an obstacle
      */
-    protected float indicatArray[] = {5,10,200,200};
+    protected float indicatArray[] = {5,10,390,200};
 
     protected Function.droneMode dMode[] = new Function.droneMode[1];   // An object that represents the mode of the ARDrone
 

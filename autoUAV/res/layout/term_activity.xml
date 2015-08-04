@@ -219,9 +219,9 @@
                       android:textAppearance="?android:attr/textAppearanceMedium" android:text="Immediately"
                       android:id="@+id/ImmText" android:layout_weight="0.10" android:gravity="center"/>
             <SeekBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ImmSenBar"
-                     android:layout_weight="1" android:max="800" android:progress="200" android:indeterminate="false"/>
+                     android:layout_weight="1" android:max="800" android:progress="390" android:indeterminate="false"/>
             <TextView android:layout_width="wrap_content" android:layout_height="match_parent"
-                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="200"
+                      android:textAppearance="?android:attr/textAppearanceMedium" android:text="390"
                       android:id="@+id/ImSenNum" android:layout_weight="0.16" android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
