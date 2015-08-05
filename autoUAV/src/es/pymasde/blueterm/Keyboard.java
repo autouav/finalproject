@@ -11,23 +11,34 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class Keyboard {
-    ARDrone drone;
-    LinearLayout ll;
-    boolean flag = false;
+    ARDrone drone;          // get the singleton object ARDrone
+    LinearLayout ll;        // get the LinearLayout of Keyboard
+    boolean flag = false;   // set the flag to false - the ll not seem
+
     SeekBar speedBar;
     SeekBar tiltBar;
+    SeekBar MaxSenBar;
+    SeekBar ImmSenBar;
+
     TextView numSpeed;
     TextView numTilt;
-
-    SeekBar MaxSenBar;
     TextView MaxSenNum;
-    SeekBar ImmSenBar;
     TextView ImmSenNum;
 
-    public float progressChanged[]; // progressChanged[0] -> speed, progressChanged[1] -> tilt
+    /*
+        progressChanged[]
+        [0] -> speed
+        [1] -> tilt
+        [2] -> Sonar Sensor
+        [3] -> IR sensor
+     */
+    public float progressChanged[];
 
-    public Keyboard(ARDrone d, LinearLayout ll, SeekBar[] seekBars, final TextView[] num, float speed[]) {
-        this.drone = d;
+    /**
+     * Constructor
+     */
+    public Keyboard(ARDrone Drone, LinearLayout ll, SeekBar[] seekBars, final TextView[] num, float indicatArray[]) {
+        this.drone = Drone;
         this.ll = ll;
         this.speedBar = seekBars[0];
         this.tiltBar = seekBars[1];
@@ -35,12 +46,13 @@ public class Keyboard {
         this.ImmSenBar = seekBars[3];
 
         ll.setVisibility(View.GONE);
-        this.progressChanged = speed;
+        this.progressChanged = indicatArray;
         this.numSpeed = num[0];
         this.numTilt = num[1];
         this.MaxSenNum = num[2];
         this.ImmSenNum = num[3];
 
+        // ChangeListener of speed (in the move function)
         speedBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -56,6 +68,7 @@ public class Keyboard {
             }
         });
 
+        // ChangeListener of tilt max
         tiltBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -77,6 +90,7 @@ public class Keyboard {
             }
         });
 
+        // ChangeListener of the Sonar (0 - Not at all sensitive, 400 - Very sensitive)
         MaxSenBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -92,6 +106,7 @@ public class Keyboard {
             }
         });
 
+        // ChangeListener of the IR sensors (800 - Not at all sensitive, 0 - Very sensitive)
         ImmSenBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -108,6 +123,9 @@ public class Keyboard {
         });
     }
 
+    /**
+     * function to switch the visibility of the keyboard
+     */
     public void setVis() {
         if (flag == false) {
             ll.setVisibility(View.VISIBLE);
@@ -118,7 +136,4 @@ public class Keyboard {
             flag = false;
         }
     }
-
-
-
 }
