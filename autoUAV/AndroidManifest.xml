@@ -28,12 +28,12 @@
 
         <!--naor - first, yosi - second ->>> dont forget to change this...-->
 
-        <meta-data
-                android:name="com.google.android.maps.v2.API_KEY"
-                android:value="AIzaSyCHrUXpcdj24OG-hNq8tTuH0UwSbv3HqO4" />
         <!--<meta-data-->
                 <!--android:name="com.google.android.maps.v2.API_KEY"-->
-                <!--android:value="AIzaSyDyyf4z79OgnlTsV7ZkosrjVbCLyjlxsG8" />-->
+                <!--android:value="AIzaSyCHrUXpcdj24OG-hNq8tTuH0UwSbv3HqO4" />-->
+        <meta-data
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="AIzaSyDyyf4z79OgnlTsV7ZkosrjVbCLyjlxsG8" />
     </application>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
