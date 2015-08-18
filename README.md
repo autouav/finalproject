@@ -27,3 +27,4 @@ The planned system includes four main components:
 ### Other
 
 -	Link to our movie Project: [Autonomous UAV Project](https://www.youtube.com/watch?v=XlXc1ci40Bg)
+-	The project was part of a BA at the University of Ariel in Samaria, Israel
