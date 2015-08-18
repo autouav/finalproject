@@ -20,7 +20,7 @@ The planned system includes four main components:
 -	Commpass (e).
 -	Bluetooth Module (f).
 
-### Connection scheme
+### Connections scheme
 
 <img src="Sefer/map.png" alt="connection Scheme">
 
