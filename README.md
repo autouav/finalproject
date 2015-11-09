@@ -22,7 +22,7 @@ The planned system includes four main components:
 
 ### Connections scheme
 
-<img src="Sefer/map.png" alt="connection Scheme">
+<img src="Reports/rep4/map.png" alt="connection Scheme">
 
 ### Other
 
